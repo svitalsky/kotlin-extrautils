@@ -7,6 +7,9 @@
     <groupId>libs.mpts.cz</groupId>
     <artifactId>extraUtils-kotlin</artifactId>
     <version>1.2-SNAPSHOT</version>
+    <description>Various Kotlin utilities library</description>
+    <packaging>jar</packaging>
+    <name>extraUtils-kotlin</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -64,6 +67,20 @@
                 <configuration>
                     <jvmTarget>1.8</jvmTarget>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
