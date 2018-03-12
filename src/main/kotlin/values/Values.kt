@@ -68,14 +68,34 @@ class OptionalValue<out E> {
 /**
  * Repeatedly lazily initialized value.
  */
-class LazyVar<out E>(private val supplier: () -> E) {
+interface LazyVar<out E> {
+
+    val value: E
+    fun getAndReset(): E
+
+    companion object {
+
+        fun <E> by(supplier: () -> E): LazyVar<E> = LazyVarBase(supplier)
+
+        fun <E> synchronized(supplier: () -> E) : LazyVar<E> =
+                object : LazyVarBase<E>(supplier) {
+                    override val value: E
+                        get() = synchronized(this) { super.value }
+
+                    override fun getAndReset() = synchronized(this) { super.getAndReset() }
+                }
+    }
+}
+
+
+private open class LazyVarBase<out E>(private val supplier: () -> E) : LazyVar<E> {
 
     private var _value: E? = null
     private var initialized = false
 
     @Suppress("UNCHECKED_CAST")
-    val value: E
-        get() = synchronized(this) {
+    override val value: E
+        get() {
             if (!initialized) {
                 _value = supplier()
                 initialized = true
@@ -83,7 +103,7 @@ class LazyVar<out E>(private val supplier: () -> E) {
             return _value as E
         }
 
-    fun getAndReset(): E = synchronized(this) {
+    override fun getAndReset(): E {
         val result = value
         initialized = false
         return result

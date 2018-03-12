@@ -28,7 +28,7 @@ interface Cursor<out E> : Iterator<E> {
 
 private open class CursorBasic<out E>(protected val iterator: Iterator<E>) : Cursor<E> {
 
-    private var current: LazyVar<OptionalValue<E>> = LazyVar {
+    private var current: LazyVar<OptionalValue<E>> = LazyVar.by {
         if (iterator.hasNext()) OptionalValue.of(iterator.next())
         else OptionalValue.empty()
     }
