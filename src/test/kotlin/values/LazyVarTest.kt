@@ -15,22 +15,37 @@
  */
 package cz.mpts.libs.extrautils.kotlin.values
 
-import org.junit.Test
-
-import org.junit.Assert.*
+import org.junit.*
+import org.junit.Assert.assertEquals
 
 class LazyVarTest {
 
-    private val intIt = (1..10).toList().iterator()
-    private val testee: LazyVar<Int> = LazyVar { intIt.next() }
+    private lateinit var intIt: Iterator<Int>
+
+    @Before
+    fun init() {
+        intIt = (1..10).toList().iterator()
+    }
 
     @Test
     fun getValue() {
+        val testee: LazyVar<Int> = LazyVar.by { intIt.next() }
         assertEquals(1, testee.value)
         assertEquals(1, testee.value)
         assertEquals(1, testee.getAndReset())
         assertEquals(2, testee.value)
         assertEquals(2, testee.getAndReset())
         assertEquals(3, testee.value)
+    }
+
+    @Test
+    fun getValueSynced() {
+        val testeeSynced: LazyVar<Int> = LazyVar.synchronized { intIt.next() }
+        assertEquals(1, testeeSynced.value)
+        assertEquals(1, testeeSynced.value)
+        assertEquals(1, testeeSynced.getAndReset())
+        assertEquals(2, testeeSynced.value)
+        assertEquals(2, testeeSynced.getAndReset())
+        assertEquals(3, testeeSynced.value)
     }
 }
