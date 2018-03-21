@@ -62,4 +62,15 @@ class LazyVarTest {
         assertEquals(2, testeeSynced.getAndReset())
         assertEquals(3, testeeSynced.value)
     }
+
+    @Test
+    fun reset() {
+        val testee = LazyVar.by { intIt.next() }
+        assertEquals(1, testee.value)
+        assertEquals(1, testee.value)
+        testee.reset()
+        assertEquals(2, testee.value)
+        testee.reset()
+        assertEquals(3, testee.value)
+    }
 }
