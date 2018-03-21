@@ -20,16 +20,30 @@ import org.junit.Assert.assertEquals
 
 class LazyVarTest {
 
-    private lateinit var intIt: Iterator<Int>
+    @Suppress("UNCHECKED_CAST")
+    private val list =
+        ((1..10).toMutableList() as MutableList<Int?>)
+            .apply { add(7, null) }
+            .toList()
+
+    private lateinit var intIt: Iterator<Int?>
 
     @Before
     fun init() {
-        intIt = (1..10).toList().iterator()
+        intIt = list.iterator()
+    }
+
+    @Test
+    fun getAndReset() {
+        val testee = LazyVar.by { intIt.next() }
+        list.forEach {
+            assertEquals(it, testee.getAndReset())
+        }
     }
 
     @Test
     fun getValue() {
-        val testee: LazyVar<Int> = LazyVar.by { intIt.next() }
+        val testee = LazyVar.by { intIt.next() }
         assertEquals(1, testee.value)
         assertEquals(1, testee.value)
         assertEquals(1, testee.getAndReset())
@@ -40,12 +54,23 @@ class LazyVarTest {
 
     @Test
     fun getValueSynced() {
-        val testeeSynced: LazyVar<Int> = LazyVar.synchronized { intIt.next() }
+        val testeeSynced = LazyVar.synchronized { intIt.next() }
         assertEquals(1, testeeSynced.value)
         assertEquals(1, testeeSynced.value)
         assertEquals(1, testeeSynced.getAndReset())
         assertEquals(2, testeeSynced.value)
         assertEquals(2, testeeSynced.getAndReset())
         assertEquals(3, testeeSynced.value)
+    }
+
+    @Test
+    fun reset() {
+        val testee = LazyVar.by { intIt.next() }
+        assertEquals(1, testee.value)
+        assertEquals(1, testee.value)
+        testee.reset()
+        assertEquals(2, testee.value)
+        testee.reset()
+        assertEquals(3, testee.value)
     }
 }

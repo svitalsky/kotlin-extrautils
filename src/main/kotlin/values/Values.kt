@@ -71,6 +71,7 @@ class OptionalValue<out E> {
 interface LazyVar<out E> {
 
     val value: E
+    fun reset()
     fun getAndReset(): E
 
     companion object {
@@ -81,6 +82,8 @@ interface LazyVar<out E> {
                 object : LazyVarBase<E>(supplier) {
                     override val value: E
                         get() = synchronized(this) { super.value }
+
+                    override fun reset() = synchronized(this) { super.reset() }
 
                     override fun getAndReset() = synchronized(this) { super.getAndReset() }
                 }
@@ -102,6 +105,10 @@ private open class LazyVarBase<out E>(private val supplier: () -> E) : LazyVar<E
             }
             return _value as E
         }
+
+    override fun reset() {
+        initialized = false
+    }
 
     override fun getAndReset(): E {
         val result = value
