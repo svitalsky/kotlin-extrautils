@@ -21,7 +21,7 @@ interface TaskStopwatch {
         fun create(): TaskStopwatch = TaskStopwatchBasic()
         fun createStarted(): TaskStopwatch = TaskStopwatchBasic(started = true)
         fun createSynchronized(): TaskStopwatch = SynchronizedTaskStopwatch()
-        fun createStartedSynchronized(): TaskStopwatch = SynchronizedTaskStopwatch(started = true)
+        fun createSynchronizedStarted(): TaskStopwatch = SynchronizedTaskStopwatch(started = true)
     }
 
     val startTime: Long

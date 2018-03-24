@@ -72,7 +72,7 @@ class TaskStopwatchTest {
 
     @Test
     fun stopSync() {
-        val duration = TaskStopwatch.createStartedSynchronized().stop()
+        val duration = TaskStopwatch.createSynchronizedStarted().stop()
         println("Duration time $duration ns")
         Assert.assertTrue(duration > 0)
     }
@@ -81,12 +81,12 @@ class TaskStopwatchTest {
     fun doubleStartSync() {
         thrown.expect(IllegalStateException::class.java)
         thrown.expectMessage("This stopwatch has already been started!")
-        TaskStopwatch.createStartedSynchronized().start()
+        TaskStopwatch.createSynchronizedStarted().start()
     }
 
     @Test
     fun doubleStopSync() {
-        val stopwatch = TaskStopwatch.createStartedSynchronized()
+        val stopwatch = TaskStopwatch.createSynchronizedStarted()
         println("The stopwatch has been started at ${stopwatch.startTime}")
         val duration = stopwatch.stop()
         println("Duration time $duration ns")
