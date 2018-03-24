@@ -16,6 +16,7 @@
 package cz.mpts.libs.extrautils.kotlin
 
 import cz.mpts.libs.extrautils.kotlin.collections.CursorTest
+import cz.mpts.libs.extrautils.kotlin.logging.TaskStopwatchTest
 import cz.mpts.libs.extrautils.kotlin.values.*
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
@@ -26,6 +27,7 @@ import org.junit.runners.Suite.SuiteClasses
 @SuiteClasses(
     LazyVarTest::class,
     OptionalValueTest::class,
-    CursorTest::class
+    CursorTest::class,
+    TaskStopwatchTest::class
 )
 class AllTests
