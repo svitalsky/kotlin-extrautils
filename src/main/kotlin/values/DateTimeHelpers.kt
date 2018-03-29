@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.mpts.libs.extrautils.kotlin
+package cz.mpts.libs.extrautils.kotlin.values
 
-import cz.mpts.libs.extrautils.kotlin.collections.CursorTest
-import cz.mpts.libs.extrautils.kotlin.logging.TaskStopwatchTest
-import cz.mpts.libs.extrautils.kotlin.values.*
-import org.junit.runner.RunWith
-import org.junit.runners.Suite
-import org.junit.runners.Suite.SuiteClasses
+import java.time.LocalDate
 
 
-@RunWith(Suite::class)
-@SuiteClasses(
-    LazyVarTest::class,
-    OptionalValueTest::class,
-    CursorTest::class,
-    TaskStopwatchTest::class,
-    DateTimeHelpersKtTest::class
-)
-class AllTests
+@Suppress("HasPlatformType")
+operator fun LocalDate.inc() = this.plusDays(1)
+
+@Suppress("HasPlatformType")
+operator fun LocalDate.dec() = minusDays(1)
+
+operator fun ClosedRange<LocalDate>.iterator() =
+    object : Iterator<LocalDate> {
+        private var current = start
+
+        override fun hasNext() = ! current.isAfter(endInclusive)
+        override fun next() =
+            if (hasNext()) current++
+            else throw NoSuchElementException("No more days in this date range!")
+    }
