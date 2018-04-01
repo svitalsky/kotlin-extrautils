@@ -13,23 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.mpts.libs.extrautils.kotlin
-
-import cz.mpts.libs.extrautils.kotlin.collections.*
-import cz.mpts.libs.extrautils.kotlin.logging.TaskStopwatchTest
-import cz.mpts.libs.extrautils.kotlin.values.*
-import org.junit.runner.RunWith
-import org.junit.runners.Suite
-import org.junit.runners.Suite.SuiteClasses
+package cz.mpts.libs.extrautils.kotlin.collections
 
 
-@RunWith(Suite::class)
-@SuiteClasses(
-    LazyVarTest::class,
-    OptionalValueTest::class,
-    CursorTest::class,
-    TaskStopwatchTest::class,
-    DateTimeHelpersKtTest::class,
-    CollectionFunctionsKtTest::class
-)
-class AllTests
+inline fun <T, K> Iterable<T>.hasMultiple(crossinline keySelector: (T) -> K) =
+    groupingBy(keySelector)
+        .eachCount()
+        .any { it.value > 1 }
+
+
+inline fun <T, K> Iterable<T>.multipleOnly(crossinline keySelector: (T) -> K) =
+    groupingBy(keySelector)
+        .eachCount()
+        .filterValues { it > 1 }
+        .keys
