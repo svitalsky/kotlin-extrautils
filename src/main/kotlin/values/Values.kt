@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package cz.mpts.libs.extrautils.kotlin.values
 
 /**
@@ -61,7 +60,7 @@ class OptionalValue<out E> {
     override fun hashCode() = valueSet.hashCode() + if (valueSet) 31 * (_value?.hashCode() ?: 0) else 0
 
     override fun toString() =
-        "OptionalValue(${if (valueSet) _value.toString() else "###-VALUE NOT SET-###"})"
+        "OptionalValue${if (valueSet) "(" + _value.toString() + ")" else "<<<#-VALUE NOT SET-#>>>"}"
 }
 
 

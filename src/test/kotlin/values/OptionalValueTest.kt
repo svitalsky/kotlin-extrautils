@@ -64,6 +64,7 @@ class OptionalValueTest {
     fun toStringTest() {
         Assert.assertEquals("OptionalValue(3)", OptionalValue.of(3).toString())
         Assert.assertEquals("OptionalValue(null)", OptionalValue.of(null).toString())
-        Assert.assertEquals("OptionalValue(###-VALUE NOT SET-###)", OptionalValue.empty<Int>().toString())
+        Assert.assertEquals("OptionalValue<<<#-VALUE NOT SET-#>>>",
+                            OptionalValue.empty<Int>().toString())
     }
 }
