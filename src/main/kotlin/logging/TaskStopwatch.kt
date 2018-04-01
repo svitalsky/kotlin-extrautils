@@ -15,6 +15,8 @@
  */
 package cz.mpts.libs.extrautils.kotlin.logging
 
+import cz.mpts.libs.extrautils.kotlin.sync
+
 interface TaskStopwatch {
 
     companion object {
@@ -65,6 +67,4 @@ private class SynchronizedTaskStopwatch(started: Boolean = false) : TaskStopwatc
     override fun start() = sync { super.start() }
 
     override fun stop() = sync { super.stop() }
-
-    private inline fun <R> sync(block: () -> R) = synchronized(lock = this, block = block)
 }

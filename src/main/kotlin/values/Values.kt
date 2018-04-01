@@ -15,6 +15,8 @@
  */
 package cz.mpts.libs.extrautils.kotlin.values
 
+import cz.mpts.libs.extrautils.kotlin.sync
+
 /**
  * This class is not about null safety but about knowing whether some
  * value — even null value! — has been set (is available &c.) or not.
@@ -80,11 +82,11 @@ interface LazyVar<out E> {
         fun <E> synchronized(supplier: () -> E) : LazyVar<E> =
                 object : LazyVarBase<E>(supplier) {
                     override val value: E
-                        get() = synchronized(this) { super.value }
+                        get() = sync { super.value }
 
-                    override fun reset() = synchronized(this) { super.reset() }
+                    override fun reset() = sync { super.reset() }
 
-                    override fun getAndReset() = synchronized(this) { super.getAndReset() }
+                    override fun getAndReset() = sync { super.getAndReset() }
                 }
     }
 }
