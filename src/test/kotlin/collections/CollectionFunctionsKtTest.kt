@@ -20,6 +20,8 @@ import org.junit.Test
 
 class CollectionFunctionsKtTest {
 
+    private val doesNot = listOf(1, 2, 3, 4, 5)
+
     private val testees = listOf(Testee("a"),
                                  Testee("b"),
                                  Testee("a"),
@@ -29,16 +31,17 @@ class CollectionFunctionsKtTest {
                                  Testee("a"),
                                  Testee("d"))
 
+
     @Test
     fun hasMultiple() {
-        val doesNot = listOf(1, 2, 3, 4, 5)
-        assertFalse(doesNot.hasMultiple { it })
+        assertFalse(doesNot.hasMultiple())
         assertTrue(testees.hasMultiple { it.value })
     }
 
 
     @Test
     fun multipleOnly() {
+        assertTrue(doesNot.multipleOnly().isEmpty())
         assertTrue(testees.multipleOnly { it.value }.contains("a"))
         assertTrue(testees.multipleOnly { it.value }.contains("b"))
         assertFalse(testees.multipleOnly { it.value }.contains("c"))

@@ -22,8 +22,21 @@ inline fun <T, K> Iterable<T>.hasMultiple(crossinline keySelector: (T) -> K) =
         .any { it.value > 1 }
 
 
+fun <T> Iterable<T>.hasMultiple() =
+    groupingBy { it }
+        .eachCount()
+        .any { it.value > 1 }
+
+
 inline fun <T, K> Iterable<T>.multipleOnly(crossinline keySelector: (T) -> K) =
     groupingBy(keySelector)
+        .eachCount()
+        .filterValues { it > 1 }
+        .keys
+
+
+fun <T> Iterable<T>.multipleOnly() =
+    groupingBy { it }
         .eachCount()
         .filterValues { it > 1 }
         .keys
