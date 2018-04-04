@@ -44,7 +44,7 @@ private open class CursorBasic<out E>(protected val iterator: Iterator<E>) : Cur
 /**
  * Returns cursor for this iterable.
  */
-fun <E> Iterable<E>.cursor() : Cursor<E> = CursorBasic(iterator())
+fun <E> Iterable<E>.cursor() : Cursor<E> = CursorBasic(iterator = iterator())
 
 
 /**
@@ -52,7 +52,7 @@ fun <E> Iterable<E>.cursor() : Cursor<E> = CursorBasic(iterator())
  * as long as the underlying iterator is.
  */
 fun <E> Iterable<E>.synchronizedCursor() : Cursor<E> =
-    object: CursorBasic<E>(iterator()) {
+    object: CursorBasic<E>(iterator = iterator()) {
         override fun hasNext() = synchronized(iterator) { super.hasNext() }
         override fun next() = synchronized(iterator) { super.next() }
         override fun peek() = synchronized(iterator) { super.peek() }
