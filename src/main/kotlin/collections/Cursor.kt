@@ -57,3 +57,11 @@ fun <E> Iterable<E>.synchronizedCursor() : Cursor<E> =
         override fun next() = synchronized(iterator) { super.next() }
         override fun peek() = synchronized(iterator) { super.peek() }
     }
+
+
+/**
+ * Returns cursor for any object having an iterator, be it native implementation
+ * or extension function
+ */
+@Suppress("unused")
+fun <E> E.cursor(iterator: Iterator<E>) : Cursor<E> = CursorBasic(iterator = iterator)
