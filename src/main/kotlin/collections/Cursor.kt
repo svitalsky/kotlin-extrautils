@@ -22,6 +22,14 @@ import cz.mpts.libs.extrautils.kotlin.values.*
  * be like before actually retrieving it.
  */
 interface Cursor<out E> : Iterator<E> {
+
+    /**
+     * Returns the value that the next `next()` call will return, without moving
+     * iteration forward. Called repeatedly will return always the same value unless
+     * `next()` is called in the meantime.
+     *
+     * @throws NoSuchElementException in case the underlying iterator has no next value
+     */
     fun peek() : E
 }
 
