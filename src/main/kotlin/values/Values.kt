@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package cz.mpts.libs.extrautils.kotlin.values
+
+import cz.mpts.libs.extrautils.kotlin.sync
 
 /**
  * This class is not about null safety but about knowing whether some
@@ -61,7 +62,7 @@ class OptionalValue<out E> {
     override fun hashCode() = valueSet.hashCode() + if (valueSet) 31 * (_value?.hashCode() ?: 0) else 0
 
     override fun toString() =
-        "OptionalValue(${if (valueSet) _value.toString() else "###-VALUE NOT SET-###"})"
+        "OptionalValue${if (valueSet) "(" + _value.toString() + ")" else "<<<#-VALUE NOT SET-#>>>"}"
 }
 
 
@@ -81,11 +82,11 @@ interface LazyVar<out E> {
         fun <E> synchronized(supplier: () -> E) : LazyVar<E> =
                 object : LazyVarBase<E>(supplier) {
                     override val value: E
-                        get() = synchronized(this) { super.value }
+                        get() = sync { super.value }
 
-                    override fun reset() = synchronized(this) { super.reset() }
+                    override fun reset() = sync { super.reset() }
 
-                    override fun getAndReset() = synchronized(this) { super.getAndReset() }
+                    override fun getAndReset() = sync { super.getAndReset() }
                 }
     }
 }

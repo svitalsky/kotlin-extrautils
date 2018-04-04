@@ -15,8 +15,11 @@
  */
 package cz.mpts.libs.extrautils.kotlin.collections
 
+import cz.mpts.libs.extrautils.kotlin.values.*
 import org.junit.*
+import org.junit.Assert.*
 import org.junit.rules.ExpectedException
+import java.time.LocalDate
 
 class CursorTest {
 
@@ -26,11 +29,11 @@ class CursorTest {
 
     @Test
     fun hasNext() {
-        Assert.assertFalse(emptyList<Any>().cursor().hasNext())
+        assertFalse(emptyList<Any>().cursor().hasNext())
         val cursor = listOf("aaa").cursor()
-        Assert.assertTrue(cursor.hasNext())
+        assertTrue(cursor.hasNext())
         cursor.next()
-        Assert.assertFalse(cursor.hasNext())
+        assertFalse(cursor.hasNext())
     }
 
 
@@ -39,7 +42,7 @@ class CursorTest {
         val list = listOf("aaa", null, "bbb")
         val cursor = list.cursor()
         list.forEach {
-            Assert.assertTrue(it == cursor.next())
+            assertTrue(it == cursor.next())
         }
     }
 
@@ -48,7 +51,7 @@ class CursorTest {
     fun nextNOK() {
         thrown.expect(NoSuchElementException::class.java)
         val cursor = listOf("aaa").cursor()
-        Assert.assertEquals("aaa", cursor.next())
+        assertEquals("aaa", cursor.next())
         cursor.next()
     }
 
@@ -56,8 +59,8 @@ class CursorTest {
     @Test
     fun peekNonEmpty() {
         val cursor = listOf("aaa").cursor()
-        Assert.assertEquals("aaa", cursor.peek())
-        Assert.assertEquals("aaa", cursor.peek())
+        assertEquals("aaa", cursor.peek())
+        assertEquals("aaa", cursor.peek())
     }
 
 
@@ -70,11 +73,11 @@ class CursorTest {
 
     @Test
     fun hasNextSynced() {
-        Assert.assertFalse(emptyList<Any>().synchronizedCursor().hasNext())
+        assertFalse(emptyList<Any>().synchronizedCursor().hasNext())
         val cursor = listOf("aaa").synchronizedCursor()
-        Assert.assertTrue(cursor.hasNext())
+        assertTrue(cursor.hasNext())
         cursor.next()
-        Assert.assertFalse(cursor.hasNext())
+        assertFalse(cursor.hasNext())
     }
 
 
@@ -83,7 +86,7 @@ class CursorTest {
         val list = listOf("aaa", null, "bbb")
         val cursor = list.synchronizedCursor()
         list.forEach {
-            Assert.assertTrue(it == cursor.next())
+            assertTrue(it == cursor.next())
         }
     }
 
@@ -92,7 +95,7 @@ class CursorTest {
     fun nextNOKSynced() {
         thrown.expect(NoSuchElementException::class.java)
         val cursor = listOf("aaa").synchronizedCursor()
-        Assert.assertEquals("aaa", cursor.next())
+        assertEquals("aaa", cursor.next())
         cursor.next()
     }
 
@@ -100,8 +103,8 @@ class CursorTest {
     @Test
     fun peekNonEmptySynced() {
         val cursor = listOf("aaa").synchronizedCursor()
-        Assert.assertEquals("aaa", cursor.peek())
-        Assert.assertEquals("aaa", cursor.peek())
+        assertEquals("aaa", cursor.peek())
+        assertEquals("aaa", cursor.peek())
     }
 
 
@@ -110,5 +113,21 @@ class CursorTest {
         thrown.expect(NoSuchElementException::class.java)
         val cursor = emptyList<Any>().synchronizedCursor()
         cursor.peek()
+    }
+
+
+    @Test
+    fun cursorOnNonIterable() {
+        val first = LocalDate.of(2018, 4, 1)
+        val last = LocalDate.of(2018, 4, 7)
+        val datedRange = first..last
+        val cursor = datedRange.cursor(datedRange.iterator())
+        assertTrue(cursor.hasNext())
+        var current = first
+        while (cursor.hasNext()) {
+            assertEquals(current, cursor.peek())
+            assertEquals(current++, cursor.next())
+        }
+        assertEquals(last, --current)
     }
 }
