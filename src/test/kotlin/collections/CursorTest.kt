@@ -120,8 +120,8 @@ class CursorTest {
     fun cursorOnNonIterable() {
         val first = LocalDate.of(2018, 4, 1)
         val last = LocalDate.of(2018, 4, 7)
-        val datedRange = first..last
-        val cursor = datedRange.cursor(datedRange.iterator())
+        val dateRange = first..last
+        val cursor = dateRange.cursor(dateRange.iterator())
         assertTrue(cursor.hasNext())
         var current = first
         while (cursor.hasNext()) {

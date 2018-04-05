@@ -22,6 +22,14 @@ import cz.mpts.libs.extrautils.kotlin.values.*
  * be like before actually retrieving it.
  */
 interface Cursor<out E> : Iterator<E> {
+
+    /**
+     * Returns the value that the next `next()` call will return, without moving
+     * iteration forward. Called repeatedly will return always the same value unless
+     * `next()` is called in the meantime.
+     *
+     * @throws NoSuchElementException in case the underlying iterator has no next value
+     */
     fun peek() : E
 }
 
@@ -44,7 +52,7 @@ private open class CursorBasic<out E>(protected val iterator: Iterator<E>) : Cur
 /**
  * Returns cursor for this iterable.
  */
-fun <E> Iterable<E>.cursor() : Cursor<E> = CursorBasic(iterator())
+fun <E> Iterable<E>.cursor() : Cursor<E> = CursorBasic(iterator = iterator())
 
 
 /**
@@ -52,7 +60,7 @@ fun <E> Iterable<E>.cursor() : Cursor<E> = CursorBasic(iterator())
  * as long as the underlying iterator is.
  */
 fun <E> Iterable<E>.synchronizedCursor() : Cursor<E> =
-    object: CursorBasic<E>(iterator()) {
+    object: CursorBasic<E>(iterator = iterator()) {
         override fun hasNext() = synchronized(iterator) { super.hasNext() }
         override fun next() = synchronized(iterator) { super.next() }
         override fun peek() = synchronized(iterator) { super.peek() }
