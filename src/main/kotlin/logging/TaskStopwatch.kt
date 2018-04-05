@@ -44,6 +44,14 @@ interface TaskStopwatch {
      * @throws IllegalStateException in case of calling on not yet started stopwatch.
      */
     fun stop(): Long
+
+    /**
+     * Returns the time this stopwatch has been running nicely formatted.
+     *
+     * @return running time nicely formatted
+     * @throws IllegalStateException in case of calling on not yet started stopwatch.
+     */
+    fun formatted(): String
 }
 
 
@@ -59,6 +67,16 @@ private open class TaskStopwatchBasic(started: Boolean = false) : TaskStopwatch 
     override fun stop() =
         if (startTime > 0) System.nanoTime() - startTime
         else throw IllegalStateException("This stopwatch has not yet been started!")
+
+    override fun formatted(): String {
+        val result = stop()
+        return when {
+            result < 1_000 -> "$result ns"
+            result < 1_000_000 -> "${"%.3f".format(result.toDouble() / 1_000.0)} µs"
+            result < 1_000_000_000 -> "${"%.3f".format(result.toDouble() / 1_000_000.0)} ms"
+            else -> "${"%.3f".format(result.toDouble() / 1_000_000_000.0)} s"
+        }
+    }
 }
 
 
@@ -67,4 +85,6 @@ private class SynchronizedTaskStopwatch(started: Boolean = false) : TaskStopwatc
     override fun start() = sync { super.start() }
 
     override fun stop() = sync { super.stop() }
+
+    override fun formatted() = sync { super.formatted() }
 }
