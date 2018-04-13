@@ -72,8 +72,12 @@ private open class TaskStopwatchBasic(started: Boolean = false) : TaskStopwatch 
         val result = stop()
         return when {
             result < 1_000 -> "$result ns"
-            result < 1_000_000 -> "${"%.3f".format(result.toDouble() / 1_000.0)} µs"
-            result < 1_000_000_000 -> "${"%.3f".format(result.toDouble() / 1_000_000.0)} ms"
+            result < 10_000 -> "${"%.3f".format(result.toDouble() / 1_000.0)} µs"
+            result < 100_000 -> "${"%.2f".format(result.toDouble() / 1_000.0)} µs"
+            result < 1_000_000 -> "${"%.1f".format(result.toDouble() / 1_000.0)} µs"
+            result < 10_000_000 -> "${"%.3f".format(result.toDouble() / 1_000_000.0)} ms"
+            result < 100_000_000 -> "${"%.2f".format(result.toDouble() / 1_000_000.0)} ms"
+            result < 1_000_000_000 -> "${"%.1f".format(result.toDouble() / 1_000_000.0)} ms"
             else -> "${"%.3f".format(result.toDouble() / 1_000_000_000.0)} s"
         }
     }
