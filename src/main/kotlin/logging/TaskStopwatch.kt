@@ -68,18 +68,21 @@ private open class TaskStopwatchBasic(started: Boolean = false) : TaskStopwatch 
         if (startTime > 0) System.nanoTime() - startTime
         else throw IllegalStateException("This stopwatch has not yet been started!")
 
-    override fun formatted(): String {
-        val result = stop()
-        return when {
-            result < 1_000 -> "$result ns"
-            result < 10_000 -> "${"%.3f".format(result.toDouble() / 1_000.0)} µs"
-            result < 100_000 -> "${"%.2f".format(result.toDouble() / 1_000.0)} µs"
-            result < 1_000_000 -> "${"%.1f".format(result.toDouble() / 1_000.0)} µs"
-            result < 10_000_000 -> "${"%.3f".format(result.toDouble() / 1_000_000.0)} ms"
-            result < 100_000_000 -> "${"%.2f".format(result.toDouble() / 1_000_000.0)} ms"
-            result < 1_000_000_000 -> "${"%.1f".format(result.toDouble() / 1_000_000.0)} ms"
-            else -> "${"%.3f".format(result.toDouble() / 1_000_000_000.0)} s"
-        }
+    override fun formatted() = formatDuration(taskStopwatch = this)
+}
+
+
+internal fun formatDuration(taskStopwatch: TaskStopwatch): String {
+    val result = taskStopwatch.stop()
+    return when {
+        result < 1_000 -> "$result ns"
+        result < 10_000 -> "${"%.3f".format(result.toDouble() / 1_000.0)} µs"
+        result < 100_000 -> "${"%.2f".format(result.toDouble() / 1_000.0)} µs"
+        result < 1_000_000 -> "${"%.1f".format(result.toDouble() / 1_000.0)} µs"
+        result < 10_000_000 -> "${"%.3f".format(result.toDouble() / 1_000_000.0)} ms"
+        result < 100_000_000 -> "${"%.2f".format(result.toDouble() / 1_000_000.0)} ms"
+        result < 1_000_000_000 -> "${"%.1f".format(result.toDouble() / 1_000_000.0)} ms"
+        else -> "${"%.3f".format(result.toDouble() / 1_000_000_000.0)} s"
     }
 }
 
