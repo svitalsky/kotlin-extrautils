@@ -115,29 +115,23 @@ class TaskStopwatchTest {
 
     @Test
     fun formatted() {
-        Mockito.`when`(taskStopwatch.stop()).thenReturn(1)
-        assertEquals("1 ns", taskStopwatch.formatDuration())
-        Mockito.`when`(taskStopwatch.stop()).thenReturn(11)
-        assertEquals("11 ns", taskStopwatch.formatDuration())
-        Mockito.`when`(taskStopwatch.stop()).thenReturn(123)
-        assertEquals("123 ns", taskStopwatch.formatDuration())
-        Mockito.`when`(taskStopwatch.stop()).thenReturn(1234)
-        assertEquals("1.234 µs", taskStopwatch.formatDuration())
-        Mockito.`when`(taskStopwatch.stop()).thenReturn(12345)
-        assertEquals("12.35 µs", taskStopwatch.formatDuration())
-        Mockito.`when`(taskStopwatch.stop()).thenReturn(123456)
-        assertEquals("123.5 µs", taskStopwatch.formatDuration())
-        Mockito.`when`(taskStopwatch.stop()).thenReturn(1234567)
-        assertEquals("1.235 ms", taskStopwatch.formatDuration())
-        Mockito.`when`(taskStopwatch.stop()).thenReturn(12345678)
-        assertEquals("12.35 ms", taskStopwatch.formatDuration())
-        Mockito.`when`(taskStopwatch.stop()).thenReturn(123456789)
-        assertEquals("123.5 ms", taskStopwatch.formatDuration())
-        Mockito.`when`(taskStopwatch.stop()).thenReturn(1234567890)
-        assertEquals("1.235 s", taskStopwatch.formatDuration())
-        Mockito.`when`(taskStopwatch.stop()).thenReturn(12345678901)
-        assertEquals("12.346 s", taskStopwatch.formatDuration())
-        Mockito.`when`(taskStopwatch.stop()).thenReturn(123456789012)
-        assertEquals("123.457 s", taskStopwatch.formatDuration())
+        assertFormatting(duration = 1, expected = "1 ns")
+        assertFormatting(duration = 12, expected = "12 ns")
+        assertFormatting(duration = 123, expected = "123 ns")
+        assertFormatting(duration = 1234, expected = "1.234 µs")
+        assertFormatting(duration = 12345, expected = "12.35 µs")
+        assertFormatting(duration = 123456, expected = "123.5 µs")
+        assertFormatting(duration = 1234567, expected = "1.235 ms")
+        assertFormatting(duration = 12345678, expected = "12.35 ms")
+        assertFormatting(duration = 123456789, expected = "123.5 ms")
+        assertFormatting(duration = 1234567890, expected = "1.235 s")
+        assertFormatting(duration = 12345678901, expected = "12.346 s")
+        assertFormatting(duration = 123456789012, expected = "123.457 s")
+    }
+
+
+    private fun assertFormatting(duration: Long, expected: String) {
+        Mockito.`when`(taskStopwatch.stop()).thenReturn(duration)
+        assertEquals(expected, taskStopwatch.formatDuration())
     }
 }
