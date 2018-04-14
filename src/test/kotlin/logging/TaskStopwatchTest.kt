@@ -106,7 +106,12 @@ class TaskStopwatchTest {
     }
 
     @Mock
-    private val taskStopwatch = Mockito.mock(TaskStopwatch::class.java)
+    private lateinit var taskStopwatch: TaskStopwatch
+
+    @Before
+    fun init() {
+        MockitoAnnotations.initMocks(this)
+    }
 
     @Test
     fun formatted() {
