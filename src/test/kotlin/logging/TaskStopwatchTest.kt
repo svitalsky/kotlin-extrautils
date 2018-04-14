@@ -16,7 +16,9 @@
 package cz.mpts.libs.extrautils.kotlin.logging
 
 import org.junit.*
+import org.junit.Assert.*
 import org.junit.rules.ExpectedException
+import org.mockito.*
 
 class TaskStopwatchTest {
 
@@ -28,14 +30,14 @@ class TaskStopwatchTest {
     fun start() {
         val startTime = TaskStopwatch.create().start()
         println("Start time $startTime ns")
-        Assert.assertTrue(startTime > 0)
+        assertTrue(startTime > 0)
     }
 
     @Test
     fun stop() {
         val duration = TaskStopwatch.createStarted().stop()
         println("Duration time $duration ns")
-        Assert.assertTrue(duration > 0)
+        assertTrue(duration > 0)
     }
 
     @Test
@@ -53,7 +55,7 @@ class TaskStopwatchTest {
         println("Duration time $duration ns")
         val duration2 = stopwatch.stop()
         println("Duration 2 time $duration2 ns")
-        Assert.assertTrue(duration2 > duration)
+        assertTrue(duration2 > duration)
     }
 
     @Test
@@ -67,14 +69,14 @@ class TaskStopwatchTest {
     fun startSync() {
         val startTime = TaskStopwatch.createSynchronized().start()
         println("Start time $startTime ns")
-        Assert.assertTrue(startTime > 0)
+        assertTrue(startTime > 0)
     }
 
     @Test
     fun stopSync() {
         val duration = TaskStopwatch.createSynchronizedStarted().stop()
         println("Duration time $duration ns")
-        Assert.assertTrue(duration > 0)
+        assertTrue(duration > 0)
     }
 
     @Test
@@ -90,9 +92,10 @@ class TaskStopwatchTest {
         println("The stopwatch has been started at ${stopwatch.startTime}")
         val duration = stopwatch.stop()
         println("Duration time $duration ns")
+        assertTrue(duration > 0)
         val duration2 = stopwatch.stop()
         println("Duration 2 time $duration2 ns")
-        Assert.assertTrue(duration2 > duration)
+        assertTrue(duration2 > duration)
     }
 
     @Test
@@ -100,5 +103,36 @@ class TaskStopwatchTest {
         thrown.expect(IllegalStateException::class.java)
         thrown.expectMessage("This stopwatch has not yet been started!")
         TaskStopwatch.createSynchronized().stop()
+    }
+
+    @Mock
+    private val taskStopwatch = Mockito.mock(TaskStopwatch::class.java)
+
+    @Test
+    fun formatted() {
+        Mockito.`when`(taskStopwatch.stop()).thenReturn(1)
+        assertEquals("1 ns", formatDuration(taskStopwatch))
+        Mockito.`when`(taskStopwatch.stop()).thenReturn(11)
+        assertEquals("11 ns", formatDuration(taskStopwatch))
+        Mockito.`when`(taskStopwatch.stop()).thenReturn(123)
+        assertEquals("123 ns", formatDuration(taskStopwatch))
+        Mockito.`when`(taskStopwatch.stop()).thenReturn(1234)
+        assertEquals("1.234 µs", formatDuration(taskStopwatch))
+        Mockito.`when`(taskStopwatch.stop()).thenReturn(12345)
+        assertEquals("12.35 µs", formatDuration(taskStopwatch))
+        Mockito.`when`(taskStopwatch.stop()).thenReturn(123456)
+        assertEquals("123.5 µs", formatDuration(taskStopwatch))
+        Mockito.`when`(taskStopwatch.stop()).thenReturn(1234567)
+        assertEquals("1.235 ms", formatDuration(taskStopwatch))
+        Mockito.`when`(taskStopwatch.stop()).thenReturn(12345678)
+        assertEquals("12.35 ms", formatDuration(taskStopwatch))
+        Mockito.`when`(taskStopwatch.stop()).thenReturn(123456789)
+        assertEquals("123.5 ms", formatDuration(taskStopwatch))
+        Mockito.`when`(taskStopwatch.stop()).thenReturn(1234567890)
+        assertEquals("1.235 s", formatDuration(taskStopwatch))
+        Mockito.`when`(taskStopwatch.stop()).thenReturn(12345678901)
+        assertEquals("12.346 s", formatDuration(taskStopwatch))
+        Mockito.`when`(taskStopwatch.stop()).thenReturn(123456789012)
+        assertEquals("123.457 s", formatDuration(taskStopwatch))
     }
 }
