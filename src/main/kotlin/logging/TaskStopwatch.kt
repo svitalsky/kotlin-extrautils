@@ -68,12 +68,12 @@ private open class TaskStopwatchBasic(started: Boolean = false) : TaskStopwatch 
         if (startTime > 0) System.nanoTime() - startTime
         else throw IllegalStateException("This stopwatch has not yet been started!")
 
-    override fun formatted() = formatDuration(taskStopwatch = this)
+    override fun formatted() = formatDuration()
 }
 
 
-internal fun formatDuration(taskStopwatch: TaskStopwatch): String {
-    val result = taskStopwatch.stop()
+internal fun TaskStopwatch.formatDuration(): String {
+    val result = stop()
     return when {
         result < 1_000 -> "$result ns"
         result < 10_000 -> "${"%.3f".format(result.toDouble() / 1_000.0)} µs"
