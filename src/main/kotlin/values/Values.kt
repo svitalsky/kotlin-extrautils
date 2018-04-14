@@ -35,6 +35,9 @@ class OptionalValue<out E> {
     private val _value: E?
     val valueSet: Boolean
 
+    val isEmpty
+        get() = ! valueSet
+
     @Suppress("UNCHECKED_CAST")
     val value: E
         get() =
