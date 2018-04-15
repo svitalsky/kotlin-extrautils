@@ -16,6 +16,7 @@
 package cz.mpts.libs.extrautils.kotlin.values
 
 import org.junit.*
+import org.junit.Assert.*
 import org.junit.rules.ExpectedException
 import java.math.BigDecimal
 
@@ -28,16 +29,23 @@ class OptionalValueTest {
 
     @Test
     fun getValueSet() {
-        Assert.assertTrue(OptionalValue.of(value = "").valueSet)
-        Assert.assertTrue(OptionalValue.of(value = null).valueSet)
-        Assert.assertFalse(OptionalValue.empty<Any>().valueSet)
+        assertTrue(OptionalValue.of(value = "").valueSet)
+        assertTrue(OptionalValue.of(value = null).valueSet)
+        assertFalse(OptionalValue.empty<Any>().valueSet)
+    }
+
+
+    @Test
+    fun isEmpty() {
+        assertTrue(OptionalValue.empty<Int>().isEmpty)
+        assertFalse(OptionalValue.of(value = 123).isEmpty)
     }
 
 
     @Test
     fun getValue() {
-        Assert.assertEquals(BigDecimal.ZERO, OptionalValue.of(value = BigDecimal.ZERO).value)
-        Assert.assertNull(OptionalValue.of(value = null).value)
+        assertEquals(BigDecimal.ZERO, OptionalValue.of(value = BigDecimal.ZERO).value)
+        assertNull(OptionalValue.of(value = null).value)
     }
 
 
@@ -51,20 +59,19 @@ class OptionalValueTest {
     @Suppress("ReplaceCallWithComparison")
     @Test
     fun equals() {
-        Assert.assertTrue(OptionalValue.of(value = "a") == OptionalValue.of(value = "a"))
-        Assert.assertFalse(OptionalValue.of(value = "a") == OptionalValue.of(value = "b"))
-        Assert.assertFalse(OptionalValue.of(value = "1").equals(OptionalValue.of(value = 1)))
-        Assert.assertTrue(OptionalValue.of(value = null) == OptionalValue.of(value = null))
+        assertTrue(OptionalValue.of(value = "a") == OptionalValue.of(value = "a"))
+        assertFalse(OptionalValue.of(value = "a") == OptionalValue.of(value = "b"))
+        assertFalse(OptionalValue.of(value = "1").equals(OptionalValue.of(value = 1)))
+        assertTrue(OptionalValue.of(value = null) == OptionalValue.of(value = null))
         // this one works thanks to type erasure
-        Assert.assertTrue(OptionalValue.of<Int?>(value = null).equals(OptionalValue.of<String?>(value = null)))
-        Assert.assertTrue(OptionalValue.empty<Any>() == OptionalValue.empty<Any>())
+        assertTrue(OptionalValue.of<Int?>(value = null).equals(OptionalValue.of<String?>(value = null)))
+        assertTrue(OptionalValue.empty<Any>() == OptionalValue.empty<Any>())
     }
 
     @Test
     fun toStringTest() {
-        Assert.assertEquals("OptionalValue(3)", OptionalValue.of(3).toString())
-        Assert.assertEquals("OptionalValue(null)", OptionalValue.of(null).toString())
-        Assert.assertEquals("OptionalValue<<<#-VALUE NOT SET-#>>>",
-                            OptionalValue.empty<Int>().toString())
+        assertEquals("OptionalValue(3)", OptionalValue.of(3).toString())
+        assertEquals("OptionalValue(null)", OptionalValue.of(null).toString())
+        assertEquals("OptionalValue<<<#-VALUE NOT SET-#>>>", OptionalValue.empty<Int>().toString())
     }
 }
