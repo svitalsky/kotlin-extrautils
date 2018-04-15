@@ -40,3 +40,17 @@ fun <T> Iterable<T>.multipleOnly() =
         .eachCount()
         .filterValues { it > 1 }
         .keys
+
+
+inline fun <T, K> Iterable<T>.singleOnly(crossinline keySelector: (T) -> K) =
+    groupingBy(keySelector)
+        .eachCount()
+        .filterValues { it == 1 }
+        .keys
+
+
+fun <T> Iterable<T>.singleOnly() =
+    groupingBy { it }
+        .eachCount()
+        .filterValues { it == 1 }
+        .keys

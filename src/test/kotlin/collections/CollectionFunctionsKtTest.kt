@@ -22,14 +22,16 @@ class CollectionFunctionsKtTest {
 
     private val doesNot = listOf(1, 2, 3, 4, 5)
 
-    private val testees = listOf(Testee("a"),
-                                 Testee("b"),
-                                 Testee("a"),
-                                 Testee("c"),
-                                 Testee("a"),
-                                 Testee("b"),
-                                 Testee("a"),
-                                 Testee("d"))
+    private val testees = listOf(Testee(value = "a"),
+                                 Testee(value = "b"),
+                                 Testee(value = "a"),
+                                 Testee(value = "c"),
+                                 Testee(value = "a"),
+                                 Testee(value = "b"),
+                                 Testee(value = "a"),
+                                 Testee(value = "d"),
+                                 Testee(value = "e"),
+                                 Testee(value = "f"))
 
 
     @Test
@@ -47,7 +49,14 @@ class CollectionFunctionsKtTest {
         assertFalse(testees.multipleOnly { it.value }.contains("c"))
         assertFalse(testees.multipleOnly { it.value }.contains("d"))
     }
+
+
+    @Test
+    fun singleOnly() {
+        assertTrue(testees.singleOnly().contains(Testee(value = "e")))
+        assertTrue(testees.singleOnly { it.value }.contains("f"))
+    }
 }
 
 
-private class Testee(val value: String)
+private data class Testee(val value: String)
