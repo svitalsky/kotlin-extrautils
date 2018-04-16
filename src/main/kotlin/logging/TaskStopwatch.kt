@@ -15,7 +15,7 @@
  */
 package cz.mpts.libs.extrautils.kotlin.logging
 
-import cz.mpts.libs.extrautils.kotlin.sync
+import cz.mpts.libs.extrautils.kotlin.*
 
 interface TaskStopwatch {
 
@@ -26,15 +26,14 @@ interface TaskStopwatch {
         fun createSynchronizedStarted(): TaskStopwatch = SynchronizedTaskStopwatch(started = true)
     }
 
-    val startTime: Long
+    val started: Boolean
 
     /**
-     * Starts the stopwatch and returns the start time in nanoseconds.
+     * Starts the stopwatch.
      *
-     * @return start time in nanoseconds
      * @throws IllegalStateException in case of calling on already started stopwatch
      */
-    fun start(): Long
+    fun start()
 
     /**
      * Returns the time this stopwatch has been running in nanoseconds.
@@ -57,16 +56,18 @@ interface TaskStopwatch {
 
 private open class TaskStopwatchBasic(started: Boolean = false) : TaskStopwatch {
 
-    final override var startTime = if (started) System.nanoTime() else 0L
+    final override var started = started
         private set
 
+    private var startTime = System.nanoTime()
+
     override fun start() =
-        if (startTime == 0L) { startTime = System.nanoTime(); startTime }
-        else throw IllegalStateException("This stopwatch has already been started!")
+        if (started) throw IllegalStateException(STOPWATCH_ALREADY_STARTED)
+        else { startTime = System.nanoTime(); started = true }
 
     override fun stop() =
-        if (startTime > 0) System.nanoTime() - startTime
-        else throw IllegalStateException("This stopwatch has not yet been started!")
+        if (started) System.nanoTime() - startTime
+        else throw IllegalStateException(STOPWATCH_NOT_YET_STARTED)
 
     override fun formatted() = formatDuration()
 }

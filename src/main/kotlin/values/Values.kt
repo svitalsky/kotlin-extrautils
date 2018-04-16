@@ -15,7 +15,7 @@
  */
 package cz.mpts.libs.extrautils.kotlin.values
 
-import cz.mpts.libs.extrautils.kotlin.sync
+import cz.mpts.libs.extrautils.kotlin.*
 
 /**
  * This class is not about null safety but about knowing whether some
@@ -42,7 +42,7 @@ class OptionalValue<out E> {
     val value: E
         get() =
             if (valueSet) _value as E
-            else throw NoSuchElementException("No value is available!")
+            else throw NoSuchElementException(NO_VALUE_AVAILABLE)
 
     private constructor() {
         _value = null

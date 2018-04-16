@@ -13,24 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.mpts.libs.extrautils.kotlin.values
+package cz.mpts.libs.extrautils.kotlin
 
-import cz.mpts.libs.extrautils.kotlin.NO_MORE_DAYS_AVAILABLE
-import java.time.LocalDate
+internal const val STOPWATCH_ALREADY_STARTED = "This stopwatch has already been started!"
 
+internal const val STOPWATCH_NOT_YET_STARTED = "This stopwatch has not yet been started!"
 
-@Suppress("HasPlatformType")
-operator fun LocalDate.inc() = this.plusDays(1)
+internal const val NO_MORE_DAYS_AVAILABLE = "No more days in this date range!"
 
-@Suppress("HasPlatformType")
-operator fun LocalDate.dec() = minusDays(1)
-
-operator fun ClosedRange<LocalDate>.iterator() =
-    object : Iterator<LocalDate> {
-        private var current = start
-
-        override fun hasNext() = ! current.isAfter(endInclusive)
-        override fun next() =
-            if (hasNext()) current++
-            else throw NoSuchElementException(NO_MORE_DAYS_AVAILABLE)
-    }
+internal const val NO_VALUE_AVAILABLE = "There is no value available!"

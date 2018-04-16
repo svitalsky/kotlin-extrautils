@@ -15,6 +15,7 @@
  */
 package cz.mpts.libs.extrautils.kotlin.logging
 
+import cz.mpts.libs.extrautils.kotlin.*
 import org.junit.*
 import org.junit.Assert.*
 import org.junit.rules.ExpectedException
@@ -28,80 +29,77 @@ class TaskStopwatchTest {
 
     @Test
     fun start() {
-        val startTime = TaskStopwatch.create().start()
-        println("Start time $startTime ns")
-        assertTrue(startTime > 0)
+        val stopwatch = TaskStopwatch.create()
+        assertFalse(stopwatch.started)
+        stopwatch.start()
+        assertTrue(stopwatch.started)
     }
 
     @Test
     fun stop() {
         val duration = TaskStopwatch.createStarted().stop()
-        println("Duration time $duration ns")
         assertTrue(duration > 0)
     }
 
     @Test
     fun doubleStart() {
         thrown.expect(IllegalStateException::class.java)
-        thrown.expectMessage("This stopwatch has already been started!")
+        thrown.expectMessage(STOPWATCH_ALREADY_STARTED)
         TaskStopwatch.createStarted().start()
     }
 
     @Test
     fun doubleStop() {
         val stopwatch = TaskStopwatch.createStarted()
-        println("The stopwatch has been started at ${stopwatch.startTime}")
+        assertTrue(stopwatch.started)
         val duration = stopwatch.stop()
-        println("Duration time $duration ns")
+        assertTrue(duration > 0)
         val duration2 = stopwatch.stop()
-        println("Duration 2 time $duration2 ns")
         assertTrue(duration2 > duration)
     }
 
     @Test
     fun noStartStop() {
         thrown.expect(IllegalStateException::class.java)
-        thrown.expectMessage("This stopwatch has not yet been started!")
+        thrown.expectMessage(STOPWATCH_NOT_YET_STARTED)
         TaskStopwatch.create().stop()
     }
 
     @Test
     fun startSync() {
-        val startTime = TaskStopwatch.createSynchronized().start()
-        println("Start time $startTime ns")
-        assertTrue(startTime > 0)
+        val stopwatch = TaskStopwatch.createSynchronized()
+        assertFalse(stopwatch.started)
+        stopwatch.start()
+        assertTrue(stopwatch.started)
     }
 
     @Test
     fun stopSync() {
         val duration = TaskStopwatch.createSynchronizedStarted().stop()
-        println("Duration time $duration ns")
         assertTrue(duration > 0)
     }
 
     @Test
     fun doubleStartSync() {
         thrown.expect(IllegalStateException::class.java)
-        thrown.expectMessage("This stopwatch has already been started!")
+        thrown.expectMessage(STOPWATCH_ALREADY_STARTED)
         TaskStopwatch.createSynchronizedStarted().start()
     }
 
     @Test
     fun doubleStopSync() {
         val stopwatch = TaskStopwatch.createSynchronizedStarted()
-        println("The stopwatch has been started at ${stopwatch.startTime}")
+        assertTrue(stopwatch.started)
         val duration = stopwatch.stop()
-        println("Duration time $duration ns")
         assertTrue(duration > 0)
         val duration2 = stopwatch.stop()
-        println("Duration 2 time $duration2 ns")
         assertTrue(duration2 > duration)
     }
 
     @Test
     fun noStartStopSync() {
         thrown.expect(IllegalStateException::class.java)
-        thrown.expectMessage("This stopwatch has not yet been started!")
+        thrown.expectMessage(STOPWATCH_NOT_YET_STARTED)
         TaskStopwatch.createSynchronized().stop()
     }
 
