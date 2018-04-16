@@ -15,6 +15,7 @@
  */
 package cz.mpts.libs.extrautils.kotlin.logging
 
+import cz.mpts.libs.extrautils.kotlin.*
 import org.junit.*
 import org.junit.Assert.*
 import org.junit.rules.ExpectedException
@@ -43,7 +44,7 @@ class TaskStopwatchTest {
     @Test
     fun doubleStart() {
         thrown.expect(IllegalStateException::class.java)
-        thrown.expectMessage("This stopwatch has already been started!")
+        thrown.expectMessage(STOPWATCH_ALREADY_STARTED)
         TaskStopwatch.createStarted().start()
     }
 
@@ -60,7 +61,7 @@ class TaskStopwatchTest {
     @Test
     fun noStartStop() {
         thrown.expect(IllegalStateException::class.java)
-        thrown.expectMessage("This stopwatch has not yet been started!")
+        thrown.expectMessage(STOPWATCH_NOT_YET_STARTED)
         TaskStopwatch.create().stop()
     }
 
@@ -81,7 +82,7 @@ class TaskStopwatchTest {
     @Test
     fun doubleStartSync() {
         thrown.expect(IllegalStateException::class.java)
-        thrown.expectMessage("This stopwatch has already been started!")
+        thrown.expectMessage(STOPWATCH_ALREADY_STARTED)
         TaskStopwatch.createSynchronizedStarted().start()
     }
 
@@ -98,7 +99,7 @@ class TaskStopwatchTest {
     @Test
     fun noStartStopSync() {
         thrown.expect(IllegalStateException::class.java)
-        thrown.expectMessage("This stopwatch has not yet been started!")
+        thrown.expectMessage(STOPWATCH_NOT_YET_STARTED)
         TaskStopwatch.createSynchronized().stop()
     }
 

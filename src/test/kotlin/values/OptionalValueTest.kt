@@ -15,6 +15,7 @@
  */
 package cz.mpts.libs.extrautils.kotlin.values
 
+import cz.mpts.libs.extrautils.kotlin.NO_VALUE_AVAILABLE
 import org.junit.*
 import org.junit.Assert.*
 import org.junit.rules.ExpectedException
@@ -52,6 +53,7 @@ class OptionalValueTest {
     @Test
     fun getValueUnset() {
         thrown.expect(NoSuchElementException::class.java)
+        thrown.expectMessage(NO_VALUE_AVAILABLE)
         OptionalValue.empty<Any>().value
     }
 

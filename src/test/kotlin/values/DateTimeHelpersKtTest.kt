@@ -15,6 +15,7 @@
  */
 package cz.mpts.libs.extrautils.kotlin.values
 
+import cz.mpts.libs.extrautils.kotlin.NO_MORE_DAYS_AVAILABLE
 import org.junit.*
 import org.junit.Assert.*
 import org.junit.Test
@@ -62,6 +63,7 @@ class DateTimeHelpersKtTest {
     @Test
     fun iteratorOverflow() {
         thrown.expect(NoSuchElementException::class.java)
+        thrown.expectMessage(NO_MORE_DAYS_AVAILABLE)
         val first = LocalDate.of(2018, 3, 30)
         val last = LocalDate.of(2018, 3, 31)
         val iterator = (first..last).iterator()
@@ -72,6 +74,7 @@ class DateTimeHelpersKtTest {
     @Test
     fun iteratorOnEmpty() {
         thrown.expect(NoSuchElementException::class.java)
+        thrown.expectMessage(NO_MORE_DAYS_AVAILABLE)
         val first = LocalDate.of(2018, 3, 30)
         val last = LocalDate.of(2018, 3, 29)
         val iterator = (first..last).iterator()

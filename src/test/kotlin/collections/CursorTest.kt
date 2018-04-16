@@ -15,6 +15,7 @@
  */
 package cz.mpts.libs.extrautils.kotlin.collections
 
+import cz.mpts.libs.extrautils.kotlin.NO_VALUE_AVAILABLE
 import cz.mpts.libs.extrautils.kotlin.values.*
 import org.junit.*
 import org.junit.Assert.*
@@ -50,6 +51,7 @@ class CursorTest {
     @Test
     fun nextNOK() {
         thrown.expect(NoSuchElementException::class.java)
+        thrown.expectMessage(NO_VALUE_AVAILABLE)
         val cursor = listOf("aaa").cursor()
         assertEquals("aaa", cursor.next())
         cursor.next()
@@ -67,6 +69,7 @@ class CursorTest {
     @Test
     fun peekEmpty() {
         thrown.expect(NoSuchElementException::class.java)
+        thrown.expectMessage(NO_VALUE_AVAILABLE)
         val cursor = emptyList<Any>().cursor()
         cursor.peek()
     }
@@ -94,6 +97,7 @@ class CursorTest {
     @Test
     fun nextNOKSynced() {
         thrown.expect(NoSuchElementException::class.java)
+        thrown.expectMessage(NO_VALUE_AVAILABLE)
         val cursor = listOf("aaa").synchronizedCursor()
         assertEquals("aaa", cursor.next())
         cursor.next()
@@ -111,6 +115,7 @@ class CursorTest {
     @Test
     fun peekEmptySynced() {
         thrown.expect(NoSuchElementException::class.java)
+        thrown.expectMessage(NO_VALUE_AVAILABLE)
         val cursor = emptyList<Any>().synchronizedCursor()
         cursor.peek()
     }
