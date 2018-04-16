@@ -28,15 +28,15 @@ class TaskStopwatchTest {
 
     @Test
     fun start() {
-        val startTime = TaskStopwatch.create().start()
-        println("Start time $startTime ns")
-        assertTrue(startTime > 0)
+        val stopwatch = TaskStopwatch.create()
+        assertFalse(stopwatch.started)
+        stopwatch.start()
+        assertTrue(stopwatch.started)
     }
 
     @Test
     fun stop() {
         val duration = TaskStopwatch.createStarted().stop()
-        println("Duration time $duration ns")
         assertTrue(duration > 0)
     }
 
@@ -50,11 +50,10 @@ class TaskStopwatchTest {
     @Test
     fun doubleStop() {
         val stopwatch = TaskStopwatch.createStarted()
-        println("The stopwatch has been started at ${stopwatch.startTime}")
+        assertTrue(stopwatch.started)
         val duration = stopwatch.stop()
-        println("Duration time $duration ns")
+        assertTrue(duration > 0)
         val duration2 = stopwatch.stop()
-        println("Duration 2 time $duration2 ns")
         assertTrue(duration2 > duration)
     }
 
@@ -67,15 +66,15 @@ class TaskStopwatchTest {
 
     @Test
     fun startSync() {
-        val startTime = TaskStopwatch.createSynchronized().start()
-        println("Start time $startTime ns")
-        assertTrue(startTime > 0)
+        val stopwatch = TaskStopwatch.createSynchronized()
+        assertFalse(stopwatch.started)
+        stopwatch.start()
+        assertTrue(stopwatch.started)
     }
 
     @Test
     fun stopSync() {
         val duration = TaskStopwatch.createSynchronizedStarted().stop()
-        println("Duration time $duration ns")
         assertTrue(duration > 0)
     }
 
@@ -89,12 +88,10 @@ class TaskStopwatchTest {
     @Test
     fun doubleStopSync() {
         val stopwatch = TaskStopwatch.createSynchronizedStarted()
-        println("The stopwatch has been started at ${stopwatch.startTime}")
+        assertTrue(stopwatch.started)
         val duration = stopwatch.stop()
-        println("Duration time $duration ns")
         assertTrue(duration > 0)
         val duration2 = stopwatch.stop()
-        println("Duration 2 time $duration2 ns")
         assertTrue(duration2 > duration)
     }
 
