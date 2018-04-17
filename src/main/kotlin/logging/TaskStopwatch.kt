@@ -16,6 +16,7 @@
 package cz.mpts.libs.extrautils.kotlin.logging
 
 import cz.mpts.libs.extrautils.kotlin.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 interface TaskStopwatch {
 
@@ -56,17 +57,19 @@ interface TaskStopwatch {
 
 private open class TaskStopwatchBasic(started: Boolean = false) : TaskStopwatch {
 
-    final override var started = started
-        private set
+    private val _started = AtomicBoolean(started)
+
+    final override val started
+        get() = _started.get()
 
     private var startTime = System.nanoTime()
 
     override fun start() =
-        if (started) throw IllegalStateException(STOPWATCH_ALREADY_STARTED)
-        else { startTime = System.nanoTime(); started = true }
+        if (_started.getAndSet(true)) throw IllegalStateException(STOPWATCH_ALREADY_STARTED)
+        else startTime = System.nanoTime()
 
     override fun stop() =
-        if (started) System.nanoTime() - startTime
+        if (_started.get()) System.nanoTime() - startTime
         else throw IllegalStateException(STOPWATCH_NOT_YET_STARTED)
 
     override fun formatted() = formatDuration()
