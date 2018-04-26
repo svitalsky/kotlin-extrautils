@@ -50,13 +50,13 @@ private open class CursorBasic<out E>(protected val iterator: Iterator<E>) : Cur
 
 
 /**
- * Returns cursor for this iterable.
+ * Returns cursor for this Iterable.
  */
 fun <E> Iterable<E>.cursor() : Cursor<E> = CursorBasic(iterator = iterator())
 
 
 /**
- * Returns synchronized cursor for this iterable. It should be thread safe
+ * Returns synchronized cursor for this Iterable. It should be thread safe
  * as long as the underlying iterator is.
  */
 fun <E> Iterable<E>.synchronizedCursor() : Cursor<E> =
@@ -69,7 +69,7 @@ fun <E> Iterable<E>.synchronizedCursor() : Cursor<E> =
 
 /**
  * Returns cursor for any object having an iterator, be it native implementation
- * or extension function
+ * or an extension function
  */
 @Suppress("unused")
 fun <E> E.cursor(iterator: Iterator<E>) : Cursor<E> = CursorBasic(iterator = iterator)

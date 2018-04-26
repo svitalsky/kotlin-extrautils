@@ -49,7 +49,7 @@ class DateTimeHelpersKtTest {
     @Test
     fun iterator() {
         val first = LocalDate.of(2018, 3, 30)
-        var last = LocalDate.of(2018, 4, 1)
+        var last = LocalDate.of(2018, 4, 10)
         val range = first..last
         var expected = first
         for (day in range) {
@@ -90,5 +90,53 @@ class DateTimeHelpersKtTest {
         assertTrue(iterator.hasNext())
         assertEquals(first, iterator.next())
         assertFalse(iterator.hasNext())
+    }
+
+
+    @Test
+    fun cursor() {
+        val first = LocalDate.of(2018, 3, 30)
+        val last = LocalDate.of(2018, 4, 10)
+        val range = first..last
+        var expected = first
+        val cursor = range.cursor()
+        while (cursor.hasNext()) {
+            assertEquals(expected++, cursor.peek())
+            cursor.next()
+        }
+    }
+
+
+    @Test
+    fun cursorOverflow() {
+        thrown.expect(NoSuchElementException::class.java)
+        thrown.expectMessage(NO_MORE_DAYS_AVAILABLE)
+        val first = LocalDate.of(2018, 3, 30)
+        val last = LocalDate.of(2018, 3, 31)
+        val cursor = (first..last).cursor()
+        for (ignore in (1..5)) cursor.next()
+    }
+
+
+    @Test
+    fun cursorOnEmpty() {
+        thrown.expect(NoSuchElementException::class.java)
+        thrown.expectMessage(NO_MORE_DAYS_AVAILABLE)
+        val first = LocalDate.of(2018, 3, 30)
+        val last = LocalDate.of(2018, 3, 29)
+        val cursor = (first..last).cursor()
+        cursor.peek()
+    }
+
+
+    @Test
+    fun cursorInSingle() {
+        val first = LocalDate.of(2018, 3, 30)
+        val last = LocalDate.of(2018, 3, 30)
+        val cursor = (first..last).cursor()
+        assertTrue(cursor.hasNext())
+        assertEquals(first, cursor.peek())
+        assertEquals(first, cursor.next())
+        assertFalse(cursor.hasNext())
     }
 }

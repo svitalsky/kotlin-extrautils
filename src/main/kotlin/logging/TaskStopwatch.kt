@@ -18,6 +18,9 @@ package cz.mpts.libs.extrautils.kotlin.logging
 import cz.mpts.libs.extrautils.kotlin.*
 import java.util.concurrent.atomic.AtomicBoolean
 
+/**
+ * Stopwatch useful for measuring tasks durations and such.
+ */
 interface TaskStopwatch {
 
     companion object {
@@ -27,6 +30,9 @@ interface TaskStopwatch {
         fun createSynchronizedStarted(): TaskStopwatch = SynchronizedTaskStopwatch(started = true)
     }
 
+    /**
+     * Tells whether this instance has been started yet.
+     */
     val started: Boolean
 
     /**
