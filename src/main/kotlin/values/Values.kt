@@ -95,6 +95,8 @@ class OptionalValue<out E> {
  * Repeatedly lazily initialized value.
  * Usually (always for current implementations within this module) needs some
  * initializer (supplier) that provides real values on demand.
+ *
+ * For usage example see [cz.mpts.libs.extrautils.kotlin.collections.Cursor] source code.
  */
 interface LazyVar<out E> {
 
