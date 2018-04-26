@@ -101,8 +101,8 @@ class DateTimeHelpersKtTest {
         var expected = first
         val cursor = range.cursor()
         while (cursor.hasNext()) {
-            assertEquals(expected++, cursor.peek())
-            cursor.next()
+            assertEquals(expected, cursor.peek())
+            assertEquals(expected++, cursor.next())
         }
     }
 
