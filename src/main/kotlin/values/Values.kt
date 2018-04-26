@@ -26,18 +26,40 @@ class OptionalValue<out E> {
     companion object {
         private val empty = OptionalValue<Any?>()
 
+        /**
+         * Returns an empty instance (the only existing empty instance, under normal
+         * circumstances) of OptionalValue cast to proper type.
+         */
         @Suppress("UNCHECKED_CAST")
         fun <E> empty() = empty as OptionalValue<E>
 
+        /**
+         * Returns OptionalValue with its `value` set to the provided value.
+         */
         fun <E> of(value: E) = OptionalValue(value)
     }
 
     private val _value: E?
+
+    /**
+     * `False` for an empty OptionalValue, otherwise `true`.
+     * @see isEmpty
+     */
     val valueSet: Boolean
 
+    /**
+     * Opposite of `valueSet`.
+     * @see valueSet
+     */
     val isEmpty
         get() = ! valueSet
 
+    /**
+     * For an empty OptionalValue throws `NoSuchElementException`, otherwise contains the value
+     * of this OptionalValue.
+     *
+     * @throws NoSuchElementException when empty
+     */
     @Suppress("UNCHECKED_CAST")
     val value: E
         get() =
@@ -71,17 +93,39 @@ class OptionalValue<out E> {
 
 /**
  * Repeatedly lazily initialized value.
+ * Usually (always for current implementations within this module) needs some
+ * initializer (supplier) that provides real values on demand.
  */
 interface LazyVar<out E> {
 
+    /**
+     * The current value. It is lazily initialized on the first access.
+     */
     val value: E
+
+    /**
+     * Switches this to an uninitialized state, so that the next access
+     * to the `value` initializes it again.
+     */
     fun reset()
+
+    /**
+     * Resets this and returns the `value` it had before resetting.
+     * @see reset
+     */
     fun getAndReset(): E
 
     companion object {
 
+        /**
+         * Creates a LazyVar that can be repeatedly initialized by the supplier.
+         */
         fun <E> by(supplier: () -> E): LazyVar<E> = LazyVarBase(supplier)
 
+        /**
+         * Creates a synchronized version of a LazyVar.
+         * @see by
+         */
         fun <E> synchronized(supplier: () -> E) : LazyVar<E> =
                 object : LazyVarBase<E>(supplier) {
                     override val value: E

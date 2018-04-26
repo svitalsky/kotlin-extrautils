@@ -18,13 +18,21 @@ package cz.mpts.libs.extrautils.kotlin.values
 import cz.mpts.libs.extrautils.kotlin.NO_MORE_DAYS_AVAILABLE
 import java.time.LocalDate
 
-
+/**
+ * Adds one day so that we can use ++ operator on LocalDate.
+ */
 @Suppress("HasPlatformType")
 operator fun LocalDate.inc() = this.plusDays(1)
 
+/**
+ * Removes one day so that we can use -- operator on LocalDate.
+ */
 @Suppress("HasPlatformType")
 operator fun LocalDate.dec() = minusDays(1)
 
+/**
+ * Adds an Iterator for a LocalDate ClosedRange.
+ */
 operator fun ClosedRange<LocalDate>.iterator() =
     object : Iterator<LocalDate> {
         private var current = start

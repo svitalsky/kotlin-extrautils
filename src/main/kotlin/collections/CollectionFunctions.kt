@@ -15,19 +15,29 @@
  */
 package cz.mpts.libs.extrautils.kotlin.collections
 
-
+/**
+ * Returns `true` if this Iterable, grouped by the `keySelector`, has at least
+ * one element occurring more than once.
+ */
 inline fun <T, K> Iterable<T>.hasMultiple(crossinline keySelector: (T) -> K) =
     groupingBy(keySelector)
         .eachCount()
         .any { it.value > 1 }
 
 
+/**
+ * Returns `true` if this Iterable has at least one element occurring more than once.
+ */
 fun <T> Iterable<T>.hasMultiple() =
     groupingBy { it }
         .eachCount()
         .any { it.value > 1 }
 
 
+/**
+ * Returns the set of those elements of this Iterable that, grouped by the
+ * `keySelector`, occur more than once.
+ */
 inline fun <T, K> Iterable<T>.multipleOnly(crossinline keySelector: (T) -> K) =
     groupingBy(keySelector)
         .eachCount()
@@ -35,6 +45,9 @@ inline fun <T, K> Iterable<T>.multipleOnly(crossinline keySelector: (T) -> K) =
         .keys
 
 
+/**
+ * Returns the set of those elements of this Iterable that occur more than once.
+ */
 fun <T> Iterable<T>.multipleOnly() =
     groupingBy { it }
         .eachCount()
@@ -42,6 +55,10 @@ fun <T> Iterable<T>.multipleOnly() =
         .keys
 
 
+/**
+ * Returns the set of those elements of this Iterable that, grouped by the
+ * `keySelector`, occur just once.
+ */
 inline fun <T, K> Iterable<T>.singleOnly(crossinline keySelector: (T) -> K) =
     groupingBy(keySelector)
         .eachCount()
@@ -49,6 +66,9 @@ inline fun <T, K> Iterable<T>.singleOnly(crossinline keySelector: (T) -> K) =
         .keys
 
 
+/**
+ * Returns the set of those elements of this Iterable that occur just once.
+ */
 fun <T> Iterable<T>.singleOnly() =
     groupingBy { it }
         .eachCount()
