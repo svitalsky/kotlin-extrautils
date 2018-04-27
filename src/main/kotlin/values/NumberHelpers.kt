@@ -13,24 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.mpts.libs.extrautils.kotlin
+package cz.mpts.libs.extrautils.kotlin.values
 
-import cz.mpts.libs.extrautils.kotlin.collections.*
-import cz.mpts.libs.extrautils.kotlin.logging.TaskStopwatchTest
-import cz.mpts.libs.extrautils.kotlin.values.*
-import org.junit.runner.RunWith
-import org.junit.runners.Suite
-import org.junit.runners.Suite.SuiteClasses
+import java.math.BigDecimal
+import java.math.BigDecimal.ZERO
 
-
-@RunWith(Suite::class)
-@SuiteClasses(
-    CollectionFunctionsKtTest::class,
-    CursorTest::class,
-    DateTimeHelpersKtTest::class,
-    LazyVarTest::class,
-    NumberHelpersKtTest::class,
-    OptionalValueTest::class,
-    TaskStopwatchTest::class
-)
-class AllTests
+/**
+ * A shortcut for so often used a comparison
+ */
+fun BigDecimal.isZero() = compareTo(ZERO) == 0

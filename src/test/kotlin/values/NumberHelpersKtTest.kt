@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cz.mpts.libs.extrautils.kotlin
+package cz.mpts.libs.extrautils.kotlin.values
 
-import cz.mpts.libs.extrautils.kotlin.collections.*
-import cz.mpts.libs.extrautils.kotlin.logging.TaskStopwatchTest
-import cz.mpts.libs.extrautils.kotlin.values.*
-import org.junit.runner.RunWith
-import org.junit.runners.Suite
-import org.junit.runners.Suite.SuiteClasses
+import org.junit.Assert.*
+import org.junit.Test
+import java.math.BigDecimal
 
+class NumberHelpersKtTest {
 
-@RunWith(Suite::class)
-@SuiteClasses(
-    CollectionFunctionsKtTest::class,
-    CursorTest::class,
-    DateTimeHelpersKtTest::class,
-    LazyVarTest::class,
-    NumberHelpersKtTest::class,
-    OptionalValueTest::class,
-    TaskStopwatchTest::class
-)
-class AllTests
+    @Test
+    fun isZero() {
+        assertTrue(BigDecimal.ZERO.isZero())
+        assertTrue(BigDecimal.valueOf(0L).isZero())
+        assertTrue(BigDecimal.valueOf(0.0).isZero())
+        assertTrue(BigDecimal.valueOf(0, 10).isZero())
+        assertTrue(BigDecimal("0.000").isZero())
+        assertFalse(BigDecimal.ONE.isZero())
+    }
+}
