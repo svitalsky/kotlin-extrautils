@@ -16,6 +16,7 @@
 package cz.mpts.libs.extrautils.kotlin.values
 
 import cz.mpts.libs.extrautils.kotlin.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * This class is not about null safety but about knowing whether some
@@ -144,25 +145,20 @@ interface LazyVar<out E> {
 private open class LazyVarBase<out E>(private val supplier: () -> E) : LazyVar<E> {
 
     private var _value: E? = null
-    private var initialized = false
+    private var initialized = AtomicBoolean(false)
 
     @Suppress("UNCHECKED_CAST")
     override val value: E
         get() {
-            if (!initialized) {
-                _value = supplier()
-                initialized = true
-            }
+            if (!initialized.getAndSet(true)) _value = supplier()
             return _value as E
         }
 
-    override fun reset() {
-        initialized = false
-    }
+    override fun reset() = initialized.set(false)
 
     override fun getAndReset(): E {
         val result = value
-        initialized = false
+        reset()
         return result
     }
 }
