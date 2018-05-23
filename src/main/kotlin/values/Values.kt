@@ -145,7 +145,7 @@ interface LazyVar<out E> {
 private open class LazyVarBase<out E>(private val supplier: () -> E) : LazyVar<E> {
 
     private var _value: E? = null
-    private var initialized = AtomicBoolean(false)
+    private val initialized = AtomicBoolean(false)
 
     @Suppress("UNCHECKED_CAST")
     override val value: E

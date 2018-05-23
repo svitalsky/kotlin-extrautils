@@ -56,6 +56,13 @@ class CollectionFunctionsKtTest {
         assertTrue(testees.singleOnly().contains(Testee(value = "e")))
         assertTrue(testees.singleOnly { it.value }.contains("f"))
     }
+
+
+    @Test
+    fun occurExactlyNTimes() {
+        assertTrue(testees.occurExactlyNTimes(n = 2).contains(Testee(value = "b")))
+        assertTrue(testees.occurExactlyNTimes(n = 4) { it.value }.contains("a"))
+    }
 }
 
 
