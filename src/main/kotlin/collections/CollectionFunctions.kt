@@ -57,20 +57,36 @@ fun <T> Iterable<T>.multipleOnly() =
 
 /**
  * Returns the set of those elements of this Iterable that, grouped by the
+ * `keySelector`, occur exactly `n` times.
+ */
+inline fun <T, K> Iterable<T>.occurExactlyNTimes(n: Int, crossinline keySelector: (T) -> K) =
+    groupingBy(keySelector)
+        .eachCount()
+        .filterValues { it == n }
+        .keys
+
+
+/**
+ * Returns the set of those elements of this Iterable that occur exactly `n` times.
+ */
+fun <T> Iterable<T>.occurExactlyNTimes(n: Int) =
+    groupingBy { it }
+        .eachCount()
+        .filterValues { it == n }
+        .keys
+
+
+/**
+ * Returns the set of those elements of this Iterable that, grouped by the
  * `keySelector`, occur just once.
  */
 inline fun <T, K> Iterable<T>.singleOnly(crossinline keySelector: (T) -> K) =
-    groupingBy(keySelector)
-        .eachCount()
-        .filterValues { it == 1 }
-        .keys
+        occurExactlyNTimes(n = 1, keySelector = keySelector)
 
 
 /**
  * Returns the set of those elements of this Iterable that occur just once.
  */
-fun <T> Iterable<T>.singleOnly() =
-    groupingBy { it }
-        .eachCount()
-        .filterValues { it == 1 }
-        .keys
+fun <T> Iterable<T>.singleOnly() = occurExactlyNTimes(n = 1)
+
+// TODO: KDoc leaves something to be desired here.
