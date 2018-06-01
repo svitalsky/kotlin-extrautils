@@ -22,3 +22,5 @@ internal const val STOPWATCH_NOT_YET_STARTED = "This stopwatch has not yet been 
 internal const val NO_MORE_DAYS_AVAILABLE = "No more days in this date range!"
 
 internal const val NO_VALUE_AVAILABLE = "There is no value available!"
+
+internal const val NO_MORE_MONTHS_AVAILABLE = "No more months in this range!"
