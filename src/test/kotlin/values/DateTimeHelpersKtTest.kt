@@ -15,12 +15,12 @@
  */
 package cz.mpts.libs.extrautils.kotlin.values
 
-import cz.mpts.libs.extrautils.kotlin.NO_MORE_DAYS_AVAILABLE
+import cz.mpts.libs.extrautils.kotlin.*
 import org.junit.*
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.rules.ExpectedException
-import java.time.LocalDate
+import java.time.*
 
 class DateTimeHelpersKtTest {
 
@@ -43,6 +43,24 @@ class DateTimeHelpersKtTest {
         assertEquals(LocalDate.of(2018, 3, 28), --date)
         date--
         assertEquals(LocalDate.of(2018, 3, 27), date)
+    }
+
+
+    @Test
+    fun ymInc() {
+        var ym = YearMonth.of(2018, 5)
+        assertEquals(YearMonth.of(2018, 6), ++ym)
+        assertEquals(YearMonth.of(2018, 6), ym++)
+        assertEquals(YearMonth.of(2018, 7), ym)
+    }
+
+
+    @Test
+    fun ymDec() {
+        var ym = YearMonth.of(2018, 5)
+        assertEquals(YearMonth.of(2018, 4), --ym)
+        assertEquals(YearMonth.of(2018, 4), ym--)
+        assertEquals(YearMonth.of(2018, 3), ym)
     }
 
 
@@ -86,6 +104,53 @@ class DateTimeHelpersKtTest {
     fun iteratorInSingle() {
         val first = LocalDate.of(2018, 3, 30)
         val last = LocalDate.of(2018, 3, 30)
+        val iterator = (first..last).iterator()
+        assertTrue(iterator.hasNext())
+        assertEquals(first, iterator.next())
+        assertFalse(iterator.hasNext())
+    }
+
+
+    @Test
+    fun iteratorYM() {
+        val first = YearMonth.of(2018, 5)
+        var last = YearMonth.of(2018, 11)
+        val range = first..last
+        var expected = first
+        for (month in range) {
+            assertEquals(expected, month)
+            expected++
+        }
+        assertEquals(++last, expected)
+    }
+
+
+    @Test
+    fun iteratorOverflowYM() {
+        thrown.expect(NoSuchElementException::class.java)
+        thrown.expectMessage(NO_MORE_MONTHS_AVAILABLE)
+        val first = YearMonth.of(2018, 5)
+        val last = YearMonth.of(2018, 6)
+        val iterator = (first..last).iterator()
+        for (ignore in (1..5)) iterator.next()
+    }
+
+
+    @Test
+    fun iteratorOnEmptyYM() {
+        thrown.expect(NoSuchElementException::class.java)
+        thrown.expectMessage(NO_MORE_MONTHS_AVAILABLE)
+        val first = YearMonth.of(2018, 6)
+        val last = YearMonth.of(2018, 5)
+        val iterator = (first..last).iterator()
+        iterator.next()
+    }
+
+
+    @Test
+    fun iteratorInSingleYM() {
+        val first = YearMonth.of(2018, 5)
+        val last = YearMonth.of(2018, 5)
         val iterator = (first..last).iterator()
         assertTrue(iterator.hasNext())
         assertEquals(first, iterator.next())

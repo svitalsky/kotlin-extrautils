@@ -13,23 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("HasPlatformType")
+
 package cz.mpts.libs.extrautils.kotlin.values
 
-import cz.mpts.libs.extrautils.kotlin.NO_MORE_DAYS_AVAILABLE
+import cz.mpts.libs.extrautils.kotlin.*
 import cz.mpts.libs.extrautils.kotlin.collections.Cursor
-import java.time.LocalDate
+import java.time.*
 
 /**
  * Adds one day so that we can use ++ operator on LocalDate.
  */
-@Suppress("HasPlatformType")
 operator fun LocalDate.inc() = this.plusDays(1)
 
 /**
  * Removes one day so that we can use -- operator on LocalDate.
  */
-@Suppress("HasPlatformType")
 operator fun LocalDate.dec() = minusDays(1)
+
+
+/**
+ * Adds one month so that we can use ++ operator on YearMonth.
+ */
+operator fun YearMonth.inc() = this.plusMonths(1)
+
+/**
+ * Removes one month so that we can use -- operator on YearMonth.
+ */
+operator fun YearMonth.dec() = this.minusMonths(1)
+
 
 /**
  * Adds an Iterator for a LocalDate ClosedRange.
@@ -43,6 +55,22 @@ operator fun ClosedRange<LocalDate>.iterator() =
         override fun next() =
             if (hasNext()) current++
             else throw NoSuchElementException(NO_MORE_DAYS_AVAILABLE)
+    }
+
+
+/**
+ * Adds an Iterator for a YearMonth ClosedRange.
+ */
+@JvmName("yearMonthIterator")
+operator fun ClosedRange<YearMonth>.iterator() =
+    object : Iterator<YearMonth> {
+        private var current = start
+
+        override fun hasNext() = ! current.isAfter(endInclusive)
+
+        override fun next() =
+            if (hasNext()) current++
+            else throw NoSuchElementException(NO_MORE_MONTHS_AVAILABLE)
     }
 
 
