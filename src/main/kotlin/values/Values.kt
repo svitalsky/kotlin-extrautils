@@ -156,9 +156,7 @@ private open class LazyVarBase<out E>(private val supplier: () -> E) : LazyVar<E
 
     override fun reset() = initialized.set(false)
 
-    override fun getAndReset(): E {
-        val result = value
-        reset()
-        return result
+    override fun getAndReset() = value.also {
+        initialized.set(false)
     }
 }
