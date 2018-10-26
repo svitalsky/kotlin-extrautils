@@ -21,4 +21,5 @@ import java.math.BigDecimal.ZERO
 /**
  * A shortcut for so often used a comparison
  */
-fun BigDecimal.isZero() = compareTo(ZERO) == 0
+val BigDecimal.isZero
+    get() = compareTo(ZERO) == 0

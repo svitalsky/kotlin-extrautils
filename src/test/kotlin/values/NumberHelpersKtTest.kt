@@ -23,11 +23,11 @@ class NumberHelpersKtTest {
 
     @Test
     fun isZero() {
-        assertTrue(BigDecimal.ZERO.isZero())
-        assertTrue(BigDecimal.valueOf(0L).isZero())
-        assertTrue(BigDecimal.valueOf(0.0).isZero())
-        assertTrue(BigDecimal.valueOf(0, 10).isZero())
-        assertTrue(BigDecimal("0.000").isZero())
-        assertFalse(BigDecimal.ONE.isZero())
+        assertTrue(BigDecimal.ZERO.isZero)
+        assertTrue(BigDecimal.valueOf(0L).isZero)
+        assertTrue(BigDecimal.valueOf(0.0).isZero)
+        assertTrue(BigDecimal.valueOf(0, 10).isZero)
+        assertTrue(BigDecimal("0.000").isZero)
+        assertFalse(BigDecimal.ONE.isZero)
     }
 }
