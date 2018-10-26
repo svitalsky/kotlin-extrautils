@@ -49,7 +49,20 @@ interface TaskStopwatch {
      * @return running time in nanoseconds
      * @throws IllegalStateException in case of calling on not yet started stopwatch.
      */
-    fun stop(): Long
+    fun time(): Long
+
+
+    /**
+     * Returns the time this stopwatch has been running in nanoseconds.
+     * May be called repeatedly.
+     *
+     * @return running time in nanoseconds
+     * @throws IllegalStateException in case of calling on not yet started stopwatch.
+     * @deprecated
+     */
+    @Deprecated("This method has been deprecated, use time instead.",
+                replaceWith = ReplaceWith("time()"))
+    fun stop(): Long = time()
 
     /**
      * Returns the time this stopwatch has been running nicely formatted.
@@ -74,7 +87,7 @@ private open class TaskStopwatchBasic(started: Boolean = false) : TaskStopwatch 
         if (_started.getAndSet(true)) throw IllegalStateException(STOPWATCH_ALREADY_STARTED)
         else startTime = System.nanoTime()
 
-    override fun stop() =
+    override fun time() =
         if (_started.get()) System.nanoTime() - startTime
         else throw IllegalStateException(STOPWATCH_NOT_YET_STARTED)
 
@@ -82,26 +95,22 @@ private open class TaskStopwatchBasic(started: Boolean = false) : TaskStopwatch 
 }
 
 
-internal fun TaskStopwatch.formatDuration(): String {
-    val result = stop()
-    return when {
-        result < 1_000 -> "$result ns"
-        result < 10_000 -> "${"%.3f".format(result.toDouble() / 1_000.0)} µs"
-        result < 100_000 -> "${"%.2f".format(result.toDouble() / 1_000.0)} µs"
-        result < 1_000_000 -> "${"%.1f".format(result.toDouble() / 1_000.0)} µs"
-        result < 10_000_000 -> "${"%.3f".format(result.toDouble() / 1_000_000.0)} ms"
-        result < 100_000_000 -> "${"%.2f".format(result.toDouble() / 1_000_000.0)} ms"
-        result < 1_000_000_000 -> "${"%.1f".format(result.toDouble() / 1_000_000.0)} ms"
-        else -> "${"%.3f".format(result.toDouble() / 1_000_000_000.0)} s"
+internal fun TaskStopwatch.formatDuration() = time().let {
+    when {
+        it < 1_000 -> "$it ns"
+        it < 10_000 -> "${"%.3f".format(it.toDouble() / 1_000.0)} µs"
+        it < 100_000 -> "${"%.2f".format(it.toDouble() / 1_000.0)} µs"
+        it < 1_000_000 -> "${"%.1f".format(it.toDouble() / 1_000.0)} µs"
+        it < 10_000_000 -> "${"%.3f".format(it.toDouble() / 1_000_000.0)} ms"
+        it < 100_000_000 -> "${"%.2f".format(it.toDouble() / 1_000_000.0)} ms"
+        it < 1_000_000_000 -> "${"%.1f".format(it.toDouble() / 1_000_000.0)} ms"
+        else -> "${"%.3f".format(it.toDouble() / 1_000_000_000.0)} s"
     }
 }
 
 
 private class SynchronizedTaskStopwatch(started: Boolean = false) : TaskStopwatchBasic(started) {
-
-    override fun start() = sync { super.start() }
-
-    override fun stop() = sync { super.stop() }
-
+    override fun start()     = sync { super.start() }
+    override fun time()      = sync { super.time() }
     override fun formatted() = sync { super.formatted() }
 }

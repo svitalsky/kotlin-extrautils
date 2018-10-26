@@ -39,10 +39,11 @@ fun <T> Iterable<T>.hasMultiple() =
  * `keySelector`, occur more than once.
  */
 inline fun <T, K> Iterable<T>.multipleOnly(crossinline keySelector: (T) -> K) =
-    groupingBy(keySelector)
-        .eachCount()
-        .filterValues { it > 1 }
-        .keys
+    groupBy(keySelector)
+        .filterValues { it.size > 1 }
+        .values
+        .flatten()
+        .toSet()
 
 
 /**
@@ -60,10 +61,11 @@ fun <T> Iterable<T>.multipleOnly() =
  * `keySelector`, occur exactly `n` times.
  */
 inline fun <T, K> Iterable<T>.occurExactlyNTimes(n: Int, crossinline keySelector: (T) -> K) =
-    groupingBy(keySelector)
-        .eachCount()
-        .filterValues { it == n }
-        .keys
+    groupBy(keySelector)
+        .filterValues { it.size == n }
+        .values
+        .flatten()
+        .toSet()
 
 
 /**
@@ -88,5 +90,3 @@ inline fun <T, K> Iterable<T>.singleOnly(crossinline keySelector: (T) -> K) =
  * Returns the set of those elements of this Iterable that occur just once.
  */
 fun <T> Iterable<T>.singleOnly() = occurExactlyNTimes(n = 1)
-
-// TODO: KDoc leaves something to be desired here.
