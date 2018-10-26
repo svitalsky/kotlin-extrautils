@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package cz.mpts.libs.extrautils.kotlin.logging
 
 import cz.mpts.libs.extrautils.kotlin.*
@@ -42,6 +44,12 @@ class TaskStopwatchTest {
     }
 
     @Test
+    fun time() {
+        val duration = TaskStopwatch.createStarted().time()
+        assertTrue(duration > 0)
+    }
+
+    @Test
     fun doubleStart() {
         thrown.expect(IllegalStateException::class.java)
         thrown.expectMessage(STOPWATCH_ALREADY_STARTED)
@@ -59,10 +67,27 @@ class TaskStopwatchTest {
     }
 
     @Test
+    fun doubleTime() {
+        val stopwatch = TaskStopwatch.createStarted()
+        assertTrue(stopwatch.started)
+        val duration = stopwatch.time()
+        assertTrue(duration > 0)
+        val duration2 = stopwatch.time()
+        assertTrue(duration2 > duration)
+    }
+
+    @Test
     fun noStartStop() {
         thrown.expect(IllegalStateException::class.java)
         thrown.expectMessage(STOPWATCH_NOT_YET_STARTED)
         TaskStopwatch.create().stop()
+    }
+
+    @Test
+    fun noStartTime() {
+        thrown.expect(IllegalStateException::class.java)
+        thrown.expectMessage(STOPWATCH_NOT_YET_STARTED)
+        TaskStopwatch.create().time()
     }
 
     @Test
@@ -76,6 +101,12 @@ class TaskStopwatchTest {
     @Test
     fun stopSync() {
         val duration = TaskStopwatch.createSynchronizedStarted().stop()
+        assertTrue(duration > 0)
+    }
+
+    @Test
+    fun timeSync() {
+        val duration = TaskStopwatch.createSynchronizedStarted().time()
         assertTrue(duration > 0)
     }
 
@@ -97,10 +128,27 @@ class TaskStopwatchTest {
     }
 
     @Test
+    fun doubleTimeSync() {
+        val stopwatch = TaskStopwatch.createSynchronizedStarted()
+        assertTrue(stopwatch.started)
+        val duration = stopwatch.time()
+        assertTrue(duration > 0)
+        val duration2 = stopwatch.time()
+        assertTrue(duration2 > duration)
+    }
+
+    @Test
     fun noStartStopSync() {
         thrown.expect(IllegalStateException::class.java)
         thrown.expectMessage(STOPWATCH_NOT_YET_STARTED)
         TaskStopwatch.createSynchronized().stop()
+    }
+
+    @Test
+    fun noStartTimeSync() {
+        thrown.expect(IllegalStateException::class.java)
+        thrown.expectMessage(STOPWATCH_NOT_YET_STARTED)
+        TaskStopwatch.createSynchronized().time()
     }
 
     @Mock
@@ -129,7 +177,7 @@ class TaskStopwatchTest {
 
 
     private fun assertFormatting(duration: Long, expected: String) {
-        Mockito.`when`(taskStopwatch.stop()).thenReturn(duration)
+        Mockito.`when`(taskStopwatch.time()).thenReturn(duration)
         assertEquals(expected, taskStopwatch.formatDuration())
     }
 }
