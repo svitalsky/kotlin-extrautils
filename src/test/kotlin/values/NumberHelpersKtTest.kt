@@ -30,4 +30,21 @@ class NumberHelpersKtTest {
         assertTrue(BigDecimal("0.000").isZero)
         assertFalse(BigDecimal.ONE.isZero)
     }
+
+    @Test
+    fun isPositive() {
+        assertFalse(BigDecimal.ZERO.isPositive)
+        assertFalse(BigDecimal.valueOf(0L, 10).isPositive)
+        assertTrue(BigDecimal.ONE.isPositive)
+        assertFalse(BigDecimal.valueOf(-55).isPositive)
+    }
+
+    @Test
+    fun isNegative() {
+        assertFalse(BigDecimal.ZERO.isNegative)
+        assertFalse(BigDecimal.valueOf(0L, 10).isNegative)
+        assertFalse(BigDecimal.ONE.isNegative)
+        assertTrue(BigDecimal.ONE.negate().isNegative)
+        assertTrue(BigDecimal.valueOf(-55).isNegative)
+    }
 }

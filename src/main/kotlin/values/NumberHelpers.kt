@@ -23,3 +23,9 @@ import java.math.BigDecimal.ZERO
  */
 val BigDecimal.isZero
     get() = compareTo(ZERO) == 0
+
+val BigDecimal.isPositive
+    get() = signum() == 1
+
+val BigDecimal.isNegative
+    get() = signum() == -1
