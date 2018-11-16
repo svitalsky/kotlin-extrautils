@@ -29,3 +29,9 @@ val BigDecimal.isPositive
 
 val BigDecimal.isNegative
     get() = signum() == -1
+
+val BigDecimal.positiveOrZero
+    get() = if (isPositive) this else ZERO
+
+val BigDecimal.negativeOrZero
+    get() = if (isNegative) this else ZERO

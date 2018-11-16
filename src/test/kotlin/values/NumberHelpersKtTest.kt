@@ -47,4 +47,16 @@ class NumberHelpersKtTest {
         assertTrue(BigDecimal.ONE.negate().isNegative)
         assertTrue(BigDecimal.valueOf(-55).isNegative)
     }
+
+    @Test
+    fun positiveOrZero() {
+        assertEquals(BigDecimal.TEN, BigDecimal.TEN.positiveOrZero)
+        assertEquals(BigDecimal.ZERO, BigDecimal.TEN.negate().positiveOrZero)
+    }
+
+    @Test
+    fun negativeOrZero() {
+        assertEquals(BigDecimal.ZERO, BigDecimal.TEN.negativeOrZero)
+        assertEquals(BigDecimal.TEN.negate(), BigDecimal.TEN.negate().negativeOrZero)
+    }
 }
