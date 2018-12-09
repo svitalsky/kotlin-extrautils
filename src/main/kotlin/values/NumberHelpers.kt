@@ -35,3 +35,7 @@ val BigDecimal.positiveOrZero
 
 val BigDecimal.negativeOrZero
     get() = if (isNegative) this else ZERO
+
+infix fun BigDecimal.isGreaterThan(other: BigDecimal) = compareTo(other) > 0
+
+infix fun BigDecimal.isLessThan(other: BigDecimal) = compareTo(other) < 0
