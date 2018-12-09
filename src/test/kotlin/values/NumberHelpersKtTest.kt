@@ -18,45 +18,65 @@ package cz.mpts.libs.extrautils.kotlin.values
 import org.junit.Assert.*
 import org.junit.Test
 import java.math.BigDecimal
+import java.math.BigDecimal.ZERO
+import java.math.BigDecimal.ONE
+import java.math.BigDecimal.TEN
+import kotlin.test.assertTrue
 
 class NumberHelpersKtTest {
 
     @Test
     fun isZero() {
-        assertTrue(BigDecimal.ZERO.isZero)
+        assertTrue(ZERO.isZero)
         assertTrue(BigDecimal.valueOf(0L).isZero)
         assertTrue(BigDecimal.valueOf(0.0).isZero)
         assertTrue(BigDecimal.valueOf(0, 10).isZero)
         assertTrue(BigDecimal("0.000").isZero)
-        assertFalse(BigDecimal.ONE.isZero)
+        assertFalse(ONE.isZero)
     }
 
     @Test
     fun isPositive() {
-        assertFalse(BigDecimal.ZERO.isPositive)
+        assertFalse(ZERO.isPositive)
         assertFalse(BigDecimal.valueOf(0L, 10).isPositive)
-        assertTrue(BigDecimal.ONE.isPositive)
+        assertTrue(ONE.isPositive)
         assertFalse(BigDecimal.valueOf(-55).isPositive)
     }
 
     @Test
     fun isNegative() {
-        assertFalse(BigDecimal.ZERO.isNegative)
+        assertFalse(ZERO.isNegative)
         assertFalse(BigDecimal.valueOf(0L, 10).isNegative)
-        assertFalse(BigDecimal.ONE.isNegative)
-        assertTrue(BigDecimal.ONE.negate().isNegative)
+        assertFalse(ONE.isNegative)
+        assertTrue(ONE.negate().isNegative)
         assertTrue(BigDecimal.valueOf(-55).isNegative)
     }
 
     @Test
     fun positiveOrZero() {
         assertEquals(BigDecimal.TEN, BigDecimal.TEN.positiveOrZero)
-        assertEquals(BigDecimal.ZERO, BigDecimal.TEN.negate().positiveOrZero)
+        assertEquals(ZERO, TEN.negate().positiveOrZero)
     }
 
     @Test
     fun negativeOrZero() {
-        assertEquals(BigDecimal.ZERO, BigDecimal.TEN.negativeOrZero)
-        assertEquals(BigDecimal.TEN.negate(), BigDecimal.TEN.negate().negativeOrZero)
+        assertEquals(ZERO, BigDecimal.TEN.negativeOrZero)
+        assertEquals(TEN.negate(), TEN.negate().negativeOrZero)
+    }
+
+    @Test
+    fun isGreaterThan() {
+        assertTrue(TEN isGreaterThan ONE)
+        assertTrue(ONE isGreaterThan ZERO)
+        assertTrue(ONE isGreaterThan ONE.negate())
+        assertFalse(ZERO isGreaterThan ZERO.negate())
+    }
+
+    @Test
+    fun isLessThan() {
+        assertTrue(ONE isLessThan  TEN)
+        assertTrue(ZERO isLessThan  ONE)
+        assertTrue(ONE.negate() isLessThan  ONE)
+        assertFalse(ZERO isLessThan  ZERO.negate())
     }
 }
