@@ -249,4 +249,28 @@ class DateTimeHelpersKtTest {
         thrown.expectMessage("Year out of bounds!")
         10_000.easterSunday
     }
+
+    @Test
+    fun nextCzechWeekDay() {
+        for (year in (2019..2100)) {
+            val yearEaster = year.easterSunday
+            assertEquals(yearEaster.plusDays(2), yearEaster.nextCzechWeekDay)
+            val yearChristmasEve = LocalDate.of(year, 12, 24)
+            var candidate = yearChristmasEve.plusDays(3)
+            while (candidate.dayOfWeek.value in (6..7)) candidate++
+            assertEquals(candidate, yearChristmasEve.nextCzechWeekDay)
+        }
+    }
+
+    @Test
+    fun previousCzechWeekDay() {
+        for (year in (2019..2100)) {
+            val yearEaster = year.easterSunday
+            assertEquals(yearEaster.minusDays(3), yearEaster.previousCzechWeekDay)
+            val yearChristmasEve = LocalDate.of(year, 12, 24)
+            var candidate = yearChristmasEve.minusDays(1)
+            while (candidate.dayOfWeek.value in (6..7)) candidate--
+            assertEquals(candidate, yearChristmasEve.previousCzechWeekDay)
+        }
+    }
 }
