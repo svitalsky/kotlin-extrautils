@@ -96,6 +96,11 @@ fun ClosedRange<LocalDate>.cursor() =
                 else throw NoSuchElementException(NO_MORE_DAYS_AVAILABLE)
         }
 
+/*
+ * Valid as of 2018.
+ * As they create more holidays or change the existing ones, we shall modify this
+ * by adding branches for new years, so that old values stay true.
+ */
 val LocalDate.isCzechHoliday: Boolean
     get() = if (dayOfWeek.value in (6..7)) true
     else when (month) {
@@ -142,3 +147,17 @@ val Int.easterSunday: LocalDate
     }
 
 private val easterEggs = WeakHashMap<Int, LocalDate>()
+
+val LocalDate.nextCzechWeekDay: LocalDate
+    get() = if (this.isCzechHoliday) {
+        var cursor = this.plusDays(1)
+        while (cursor.isCzechHoliday) cursor++
+        cursor
+    } else this
+
+val LocalDate.previousCzechWeekDay: LocalDate
+    get() = if (this.isCzechHoliday) {
+        var cursor = this.minusDays(1)
+        while (cursor.isCzechHoliday) cursor--
+        cursor
+    } else this
