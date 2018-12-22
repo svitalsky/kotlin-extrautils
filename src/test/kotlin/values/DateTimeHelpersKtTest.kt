@@ -21,6 +21,7 @@ import org.junit.Assert.*
 import org.junit.Test
 import org.junit.rules.ExpectedException
 import java.time.*
+import java.time.Month.*
 
 class DateTimeHelpersKtTest {
 
@@ -203,5 +204,49 @@ class DateTimeHelpersKtTest {
         assertEquals(first, cursor.peek())
         assertEquals(first, cursor.next())
         assertFalse(cursor.hasNext())
+    }
+
+    @Test
+    fun czechHoliday() {
+        var cursor = LocalDate.of(2019, 1, 1)
+        while (cursor.year == 2019) {
+            if ((cursor.dayOfWeek.value in (6..7))) assertTrue(cursor.isCzechHoliday)
+            else with (cursor) {
+                when (month!!) {
+                    JANUARY -> assertTrue(dayOfMonth == 1 || !isCzechHoliday)
+                    FEBRUARY, MARCH, JUNE, AUGUST -> assertFalse(isCzechHoliday)
+                    APRIL -> assertTrue(dayOfMonth == 19 || dayOfMonth == 22 || !isCzechHoliday)
+                    MAY -> assertTrue(dayOfMonth == 1 || dayOfMonth == 8 || !isCzechHoliday)
+                    JULY -> assertTrue(dayOfMonth in (5..6) || !isCzechHoliday)
+                    SEPTEMBER, OCTOBER -> assertTrue(dayOfMonth == 28 || !isCzechHoliday)
+                    NOVEMBER -> assertTrue(dayOfMonth == 17 || !isCzechHoliday)
+                    DECEMBER -> assertTrue(dayOfMonth in (24..26) || !isCzechHoliday)
+                }
+            }
+            cursor++
+        }
+    }
+
+    @Test
+    fun easter() {
+        assertTrue(LocalDate.of(2019, 4, 19).easterFriday)
+        assertTrue(LocalDate.of(2019, 4, 21).easterSunday)
+        assertTrue(LocalDate.of(2019, 4, 22).easterMonday)
+        assertEquals(LocalDate.of(2018, 4, 1), 2018.easterSunday)
+        assertEquals(LocalDate.of(2019, 4, 21), 2019.easterSunday)
+    }
+
+    @Test
+    fun easterWrongYearLo() {
+        thrown.expect(IllegalArgumentException::class.java)
+        thrown.expectMessage("Year out of bounds!")
+        0.easterSunday
+    }
+
+    @Test
+    fun easterWrongYearHi() {
+        thrown.expect(IllegalArgumentException::class.java)
+        thrown.expectMessage("Year out of bounds!")
+        10_000.easterSunday
     }
 }
