@@ -21,6 +21,7 @@ import cz.mpts.libs.extrautils.kotlin.*
 import cz.mpts.libs.extrautils.kotlin.collections.Cursor
 import java.time.*
 import java.time.Month.*
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -161,3 +162,11 @@ val LocalDate.previousCzechWeekDay: LocalDate
         while (cursor.isCzechHoliday) cursor--
         cursor
     } else this
+
+val ZonedDateTime.httpFormatted
+    get() = DateTimeFormatter
+        .ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
+        .format(withZoneSameInstant(ZoneId.of("GMT")))
+
+val nowHttpFormatted
+    get() = ZonedDateTime.now().httpFormatted

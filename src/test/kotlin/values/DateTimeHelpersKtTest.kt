@@ -273,4 +273,23 @@ class DateTimeHelpersKtTest {
             assertEquals(candidate, yearChristmasEve.previousCzechWeekDay)
         }
     }
+
+    @Test
+    fun httpFormatted() {
+        val winterTime = LocalDateTime.of(2018, 12, 24, 15, 0, 0)
+        var zoned = ZonedDateTime.of(winterTime, ZoneId.of("Europe/Prague"))
+        assertEquals("Mon, 24 Dec 2018 14:00:00 GMT", zoned.httpFormatted)
+        val summerTime = LocalDateTime.of(2018, 7, 25, 15, 0, 0)
+        zoned = ZonedDateTime.of(summerTime, ZoneId.of("Europe/Prague"))
+        assertEquals("Wed, 25 Jul 2018 13:00:00 GMT", zoned.httpFormatted)
+    }
+
+    @Test
+    fun nowHttpFormattedTest() {
+        // pseudo-test: might often fail around midnights and so on...
+        val before = nowHttpFormatted
+        Thread.sleep(1000L)
+        val after = nowHttpFormatted
+        assertTrue(after > before)
+    }
 }
