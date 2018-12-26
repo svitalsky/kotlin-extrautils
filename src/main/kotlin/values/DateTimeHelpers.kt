@@ -163,10 +163,13 @@ val LocalDate.previousCzechWeekDay: LocalDate
         cursor
     } else this
 
+val httpDatetimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
+
 val ZonedDateTime.httpFormatted
-    get() = DateTimeFormatter
-        .ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
-        .format(withZoneSameInstant(ZoneId.of("GMT")))
+    get() = httpDatetimeFormatter.format(withZoneSameInstant(ZoneId.of("GMT")))
 
 val nowHttpFormatted
     get() = ZonedDateTime.now().httpFormatted
+
+val String.parsedHttpDatetime: ZonedDateTime
+    get() = httpDatetimeFormatter.parse(this, ZonedDateTime::from)
