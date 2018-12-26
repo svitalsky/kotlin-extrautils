@@ -292,4 +292,10 @@ class DateTimeHelpersKtTest {
         val after = nowHttpFormatted
         assertTrue(after > before)
     }
+
+    @Test
+    fun parsedHttpDatetimeTest() {
+        val zoned = ZonedDateTime.of(2018, 12, 26, 18, 14, 23, 0, ZoneId.of("Europe/Prague"))
+        assertEquals(zoned.withZoneSameInstant(ZoneId.of("GMT")), zoned.httpFormatted.parsedHttpDatetime)
+    }
 }
