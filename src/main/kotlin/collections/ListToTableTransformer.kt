@@ -2,6 +2,7 @@ package cz.mpts.libs.extrautils.kotlin.collections
 
 import cz.mpts.libs.extrautils.kotlin.collections.TableFillingType.*
 
+@Suppress("UNCHECKED_CAST")
 class ListToTableTransformer {
     private var tableWidth: Int = 0
     private var tableHeight: Int = 0
@@ -12,24 +13,49 @@ class ListToTableTransformer {
         get() = _fillingType!!
 
     fun <E> mkTableSource(list: List<E>) =
-        mutableListOf<List<E?>>().fillResult(list) { null }
+        mutableListOf<List<E?>>().fillResult(list = list) { null }
 
     fun <E> mkTableSource(list: List<E>, empty: E) =
-        mutableListOf<List<E>>().fillResult(list) { empty }
+        mutableListOf<List<E>>().fillResult(list = list) { empty }
 
-    fun <E> mkTableSource(list: List<E>, emptyProducer: () -> E) =
-        mutableListOf<List<E>>().fillResult(list, emptyProducer)
+    fun <E, T> mkTableSource(list: List<E>, itemTransformer: (e: E) -> T) =
+        mutableListOf<List<E?>>().fillResult(list = list,
+                                            itemTransformer = itemTransformer) { null }
 
-    private fun <E> MutableList<List<E>>.fillResult(list: List<E>, emptyProducer: () -> E) = apply {
-        mkIndexPattern().forEach { rowIndexes ->
-            mutableListOf<E>().apply {
-                rowIndexes.forEach { index ->
-                    if (index in 0 until list.size) add(list[index])
-                    else add(emptyProducer())
-                }
-            }.also { add(it.toList()) }
-        }
-    }.toList()
+    fun <E, T> mkTableSource(list: List<E>, empty: T, itemTransformer: (e: E) -> T) =
+        mutableListOf<List<E>>().fillResult(list = list,
+                                            itemTransformer = itemTransformer) { empty }
+
+    fun <E, T, R> mkTableSource(list: List<E>,
+                                itemTransformer: (e: E) -> T,
+                                rowTransformer: (l: List<T?>) -> R) =
+        mutableListOf<R>().fillResult(list = list,
+                                      itemTransformer = itemTransformer,
+                                      rowTransformer = rowTransformer) { null }
+
+    fun <E, T, R> mkTableSource(list: List<E>,
+                                empty: T,
+                                itemTransformer: (e: E) -> T,
+                                rowTransformer: (l: List<T>) -> R) =
+        mutableListOf<R>().fillResult(list = list,
+                                      itemTransformer = itemTransformer,
+                                      rowTransformer = rowTransformer) { empty }
+
+    private fun <E, T, R> MutableList<R>.fillResult(
+        list: List<E>,
+        itemTransformer: (e: E) -> T = { it as T },
+        rowTransformer: (l: List<T>) -> R = { it as R },
+        emptyProducer: () -> T) =
+        apply {
+            mkIndexPattern().forEach { rowIndexes ->
+                mutableListOf<T>().apply {
+                    rowIndexes.forEach { index ->
+                        if (index in 0 until list.size) add(itemTransformer(list[index]))
+                        else add(emptyProducer())
+                    }
+                }.also { add(rowTransformer(it.toList())) }
+            }
+        }.toList()
 
     fun mkIndexPattern() = run {
         validateInputs()

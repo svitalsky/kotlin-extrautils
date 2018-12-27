@@ -9,6 +9,7 @@ class ListToTableTransformerTest {
     private lateinit var transformer: ListToTableTransformer
     private var list = listOf("1", "2", "3")
     private var listLong = listOf("1", "2", "3", "4", "5", "6", "7")
+    private var letters = listOf("a", "b", "c")
 
     @Before
     fun init() {
@@ -82,23 +83,58 @@ class ListToTableTransformerTest {
     }
 
     @Test
-    fun mkTableSourceEmptySourceTest() {
-        val transformer = transformer.listSize(4).startPadding(2)
-        val expected = listOf(listOf("empty", "empty", "1"), listOf("2", "3", "empty"))
-        assertEquals(expected, transformer.mkTableSource(list) { "empty" })
-    }
-
-    @Test
-    fun mkTableSourceEmptySourceLonglistTest() {
+    fun mkTableSourceEmptyLonglistTest() {
         val transformer = transformer.listSize(4).startPadding(2)
         val expected = listOf(listOf("empty", "empty", "1"), listOf("2", "3", "4"))
-        assertEquals(expected, transformer.mkTableSource(listLong) { "empty" })
+        assertEquals(expected, transformer.mkTableSource(listLong, "empty"))
     }
 
     @Test
-    fun mkTableSourceEmptySourceLongShortTest() {
+    fun mkTableSourceEmptyLongShortTest() {
         val transformer = transformer.listSize(3).startPadding(2)
         val expected = listOf(listOf("empty", "empty", "1"), listOf("2", "3", "empty"))
-        assertEquals(expected, transformer.mkTableSource(listLong) { "empty" })
+        assertEquals(expected, transformer.mkTableSource(listLong, "empty"))
+    }
+
+    @Test
+    fun mkTableSourceItemTransformerNull() {
+        val transformer = transformer.listSize(3).startPadding(2)
+        val expected = listOf(listOf(null, null, 1), listOf(2, 3, null))
+        assertEquals(expected,
+                     transformer.mkTableSource(list = list,
+                                               itemTransformer = { it.toInt() }))
+    }
+
+    @Test
+    fun mkTableSourceItemTransformerEmpty() {
+        val transformer = transformer.listSize(3).startPadding(2)
+        val expected = listOf(listOf(0, 0, 1), listOf(2, 3, 0))
+        assertEquals(expected,
+                     transformer.mkTableSource(list = list,
+                                               empty = 0,
+                                               itemTransformer = { it.toInt() }))
+    }
+
+    @Test
+    fun mkTableSourceRowTransformerNull() {
+        val transformer = transformer.listSize(3).startPadding(2)
+        val expected = listOf("  1", "23 ")
+        assertEquals(expected,
+                     transformer.mkTableSource(list = list,
+                                               itemTransformer = { it }) { list ->
+                         list.joinToString(separator = "") { it ?: " " }
+                     })
+    }
+
+    @Test
+    fun mkTableSourceRowTransformerEmpty() {
+        val transformer = transformer.listSize(3).startPadding(2)
+        val expected = listOf("-, -, A", "B, C, -")
+        assertEquals(expected,
+                     transformer.mkTableSource(list = letters,
+                                               empty = "-",
+                                               itemTransformer = { it.toUpperCase() }) { list ->
+                         list.joinToString()
+                     })
     }
 }
