@@ -31,6 +31,7 @@ import org.junit.runners.Suite.SuiteClasses
     LazyVarTest::class,
     NumberHelpersKtTest::class,
     OptionalValueTest::class,
-    TaskStopwatchTest::class
+    TaskStopwatchTest::class,
+    ListToTableTransformerTest::class
 )
 class AllTests

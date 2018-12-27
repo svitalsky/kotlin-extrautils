@@ -6,7 +6,7 @@
 
     <groupId>libs.mpts.cz</groupId>
     <artifactId>extraUtils-kotlin</artifactId>
-    <version>1.41</version>
+    <version>1.42-SNAPSHOT</version>
     <description>Various Kotlin utilities library</description>
     <packaging>jar</packaging>
     <name>extraUtils-kotlin</name>
@@ -25,6 +25,7 @@
             <artifactId>kotlin-stdlib-jdk8</artifactId>
             <version>${kotlin.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test-junit</artifactId>
@@ -91,6 +92,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>
