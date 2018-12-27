@@ -2,7 +2,6 @@ package cz.mpts.libs.extrautils.kotlin.collections
 
 import cz.mpts.libs.extrautils.kotlin.collections.TableFillingType.*
 
-@Suppress("UNCHECKED_CAST")
 class ListToTableTransformer {
     private var tableWidth: Int = 0
     private var tableHeight: Int = 0
@@ -43,8 +42,8 @@ class ListToTableTransformer {
 
     private fun <E, T, R> MutableList<R>.fillResult(
         list: List<E>,
-        itemTransformer: (e: E) -> T = { it as T },
-        rowTransformer: (l: List<T>) -> R = { it as R },
+        itemTransformer: (e: E) -> T = ::identityTransformation,
+        rowTransformer: (l: List<T>) -> R = ::identityTransformation,
         emptyProducer: () -> T) =
         apply {
             mkIndexPattern().forEach { rowIndexes ->
@@ -56,6 +55,10 @@ class ListToTableTransformer {
                 }.also { add(rowTransformer(it.toList())) }
             }
         }.toList()
+
+
+    @Suppress("UNCHECKED_CAST")
+    private fun <E, R> identityTransformation(e: E) = e as R
 
     fun mkIndexPattern() = run {
         validateInputs()
