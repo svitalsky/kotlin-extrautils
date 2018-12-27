@@ -8,12 +8,14 @@ class ListToTableTransformer private constructor(builder: TransformerBuilder) {
     private val tableHeight: Int
     private val fillingType: TableFillingType
     private val listSize: Int
+    private val startPadding: Int
 
     init {
         tableWidth = builder.tableWidth
         tableHeight = builder.tableHeight
         fillingType = builder.fillingType!!
         listSize = builder.listSize
+        startPadding = builder.startPadding
     }
 
     fun transform() =
@@ -30,7 +32,11 @@ class ListToTableTransformer private constructor(builder: TransformerBuilder) {
         }
 
     private val Int.effectiveIndex
-        get() = if (this < listSize) this else -1
+        get() = when {
+            this < startPadding -> -1
+            this < listSize + startPadding -> this - startPadding
+            else -> -1
+        }
 
     companion object {
         class TransformerBuilder {
@@ -38,11 +44,13 @@ class ListToTableTransformer private constructor(builder: TransformerBuilder) {
             internal var tableHeight = 0
             internal var listSize = 0
             internal var fillingType: TableFillingType? = null
+            internal var startPadding = 0
 
             fun tableWidth(value: Int) = apply { tableWidth = value }
             fun tableHeight(value: Int) = apply { tableHeight = value }
             fun listSize(value: Int) = apply { listSize = value }
             fun fillingType(value: TableFillingType) = apply { fillingType = value }
+            fun startPadding(value: Int) = apply { startPadding = value }
 
             fun build() : ListToTableTransformer {
                 validateInputs()
@@ -66,7 +74,12 @@ class ListToTableTransformer private constructor(builder: TransformerBuilder) {
                 if (fillingType == null) {
                     throw IllegalArgumentException("Filling type must be given!")
                 }
-                if (tableHeight > 0 && tableWidth > 0 && listSize > (tableHeight * tableWidth)) {
+                if (startPadding < 0) {
+                    throw IllegalArgumentException("Start padding must be zero or positive!")
+                }
+                if (tableHeight > 0 && tableWidth > 0 &&
+                    (listSize + startPadding) > (tableHeight * tableWidth))
+                {
                     throw IllegalArgumentException("Given table height and width are too small for given list size!")
                 }
             }
