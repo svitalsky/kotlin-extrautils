@@ -137,4 +137,16 @@ class ListToTableTransformerTest {
                          list.joinToString()
                      })
     }
+
+    @Test
+    fun mkTableSourceTransformWays() {
+        val transformer = transformer.listSize(3).startPadding(2)
+        assertEquals(transformer.mkTableSource(list = letters.map { it.toUpperCase() },
+                                               empty = "-").map { it.joinToString() },
+                     transformer.mkTableSource(list = letters,
+                                               empty = "-",
+                                               itemTransformer = { it.toUpperCase() }) { list ->
+                         list.joinToString()
+                     })
+    }
 }
