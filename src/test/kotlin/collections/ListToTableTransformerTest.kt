@@ -49,4 +49,18 @@ class ListToTableTransformerTest {
         val expected = listOf(listOf(1, 3, -1), listOf(0, 2, 4))
         assertEquals(expected, transformer.transform())
     }
+
+    @Test
+    fun transformTopRightPadding() {
+        val transformer = transformerBuilder.fillingType(TOP_LEFT_TO_RIGHT).startPadding(2).listSize(3).build()
+        val expected = listOf(listOf(-1, -1, 0), listOf(1, 2, -1))
+        assertEquals(expected, transformer.transform())
+    }
+
+    @Test
+    fun transformBottomTopPadding() {
+        val transformer = transformerBuilder.fillingType(BOTTOM_LEFT_TO_TOP).startPadding(2).listSize(4).build()
+        val expected = listOf(listOf(-1, 1, 3), listOf(-1, 0, 2))
+        assertEquals(expected, transformer.transform())
+    }
 }
