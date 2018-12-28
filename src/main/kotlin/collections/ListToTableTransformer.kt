@@ -12,25 +12,28 @@ class ListToTableTransformer {
         get() = _fillingType!!
 
     fun <E> mkTableSource(list: List<E>) =
-        mutableListOf<List<E?>>().fillResult(list = list) { null }
+        mutableListOf<List<E?>>().fillResult(list = list, empty = null)
 
     fun <E> mkTableSource(list: List<E>, empty: E) =
-        mutableListOf<List<E>>().fillResult(list = list) { empty }
+        mutableListOf<List<E>>().fillResult(list = list, empty = empty)
 
     fun <E, T> mkTableSource(list: List<E>, itemTransformer: (e: E) -> T) =
         mutableListOf<List<E?>>().fillResult(list = list,
-                                            itemTransformer = itemTransformer) { null }
+                                             itemTransformer = itemTransformer,
+                                             empty = null)
 
     fun <E, T> mkTableSource(list: List<E>, empty: T, itemTransformer: (e: E) -> T) =
         mutableListOf<List<E>>().fillResult(list = list,
-                                            itemTransformer = itemTransformer) { empty }
+                                            itemTransformer = itemTransformer,
+                                            empty = empty)
 
     fun <E, T, R> mkTableSource(list: List<E>,
                                 itemTransformer: (e: E) -> T,
                                 rowTransformer: (l: List<T?>) -> R) =
         mutableListOf<R>().fillResult(list = list,
                                       itemTransformer = itemTransformer,
-                                      rowTransformer = rowTransformer) { null }
+                                      rowTransformer = rowTransformer,
+                                      empty = null)
 
     fun <E, T, R> mkTableSource(list: List<E>,
                                 empty: T,
@@ -38,24 +41,24 @@ class ListToTableTransformer {
                                 rowTransformer: (l: List<T>) -> R) =
         mutableListOf<R>().fillResult(list = list,
                                       itemTransformer = itemTransformer,
-                                      rowTransformer = rowTransformer) { empty }
+                                      rowTransformer = rowTransformer,
+                                      empty = empty)
 
     private fun <E, T, R> MutableList<R>.fillResult(
         list: List<E>,
+        empty: T,
         itemTransformer: (e: E) -> T = ::identityTransformation,
-        rowTransformer: (l: List<T>) -> R = ::identityTransformation,
-        emptyProducer: () -> T) =
+        rowTransformer: (l: List<T>) -> R = ::identityTransformation) =
         apply {
             mkIndexPattern().forEach { rowIndexes ->
                 mutableListOf<T>().apply {
                     rowIndexes.forEach { index ->
                         if (index in 0 until list.size) add(itemTransformer(list[index]))
-                        else add(emptyProducer())
+                        else add(empty)
                     }
                 }.also { add(rowTransformer(it.toList())) }
             }
         }.toList()
-
 
     @Suppress("UNCHECKED_CAST")
     private fun <E, R> identityTransformation(e: E) = e as R
