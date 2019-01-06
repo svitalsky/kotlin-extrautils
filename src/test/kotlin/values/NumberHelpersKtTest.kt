@@ -79,4 +79,26 @@ class NumberHelpersKtTest {
         assertTrue(ONE.negate() isLessThan  ONE)
         assertFalse(ZERO isLessThan  ZERO.negate())
     }
+
+    @Test
+    fun isEqualTo() {
+        assertTrue(ONE isEqualTo BigDecimal.valueOf(1.00000))
+        assertTrue(ZERO isEqualTo BigDecimal.valueOf(0.000))
+        assertTrue(TEN isEqualTo BigDecimal.valueOf(1.00000).multiply(BigDecimal.valueOf(10.0000000000)))
+        assertTrue(TEN isEqualTo ONE.multiply(TEN))
+        assertFalse(ONE isEqualTo ZERO)
+        assertFalse(ONE isEqualTo ONE.negate())
+        assertFalse(ONE isEqualTo BigDecimal.valueOf(1.00000001))
+    }
+
+    @Test
+    fun isNotEqualTo() {
+        assertFalse(ONE isNotEqualTo BigDecimal.valueOf(1.00000))
+        assertFalse(ZERO isNotEqualTo BigDecimal.valueOf(0.000))
+        assertFalse(TEN isNotEqualTo BigDecimal.valueOf(1.00000).multiply(BigDecimal.valueOf(10.0000000000)))
+        assertFalse(TEN isNotEqualTo ONE.multiply(TEN))
+        assertTrue(ONE isNotEqualTo ZERO)
+        assertTrue(ONE isNotEqualTo ONE.negate())
+        assertTrue(ONE isNotEqualTo BigDecimal.valueOf(1.00000001))
+    }
 }
