@@ -41,3 +41,7 @@ val BigDecimal.negativeOrZero
 infix fun BigDecimal.isGreaterThan(other: BigDecimal) = compareTo(other) > 0
 
 infix fun BigDecimal.isLessThan(other: BigDecimal) = compareTo(other) < 0
+
+infix fun BigDecimal.isEqualTo(other: BigDecimal) = compareTo(other) == 0
+
+infix fun BigDecimal.isNotEqualTo(other: BigDecimal) = compareTo(other) != 0
