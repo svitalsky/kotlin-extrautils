@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:Suppress("HasPlatformType")
+@file:Suppress("HasPlatformType", "DeprecatedCallableAddReplaceWith")
 
 package cz.mpts.libs.extrautils.kotlin.values
 
@@ -38,8 +38,10 @@ val BigDecimal.positiveOrZero
 val BigDecimal.negativeOrZero
     get() = if (isNegative) this else ZERO
 
+@Deprecated("There is actually an overloaded operator in the stdlib.")
 infix fun BigDecimal.isGreaterThan(other: BigDecimal) = compareTo(other) > 0
 
+@Deprecated("There is actually an overloaded operator in the stdlib.")
 infix fun BigDecimal.isLessThan(other: BigDecimal) = compareTo(other) < 0
 
 infix fun BigDecimal.isEqualTo(other: BigDecimal) = compareTo(other) == 0
