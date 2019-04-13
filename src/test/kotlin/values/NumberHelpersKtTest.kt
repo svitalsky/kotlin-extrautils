@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:Suppress("DEPRECATION")
+
 package cz.mpts.libs.extrautils.kotlin.values
 
 import org.junit.Assert.*
@@ -54,13 +56,13 @@ class NumberHelpersKtTest {
 
     @Test
     fun positiveOrZero() {
-        assertEquals(BigDecimal.TEN, BigDecimal.TEN.positiveOrZero)
+        assertEquals(TEN, TEN.positiveOrZero)
         assertEquals(ZERO, TEN.negate().positiveOrZero)
     }
 
     @Test
     fun negativeOrZero() {
-        assertEquals(ZERO, BigDecimal.TEN.negativeOrZero)
+        assertEquals(ZERO, TEN.negativeOrZero)
         assertEquals(TEN.negate(), TEN.negate().negativeOrZero)
     }
 
