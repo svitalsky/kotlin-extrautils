@@ -126,26 +126,20 @@ val LocalDate.easterMonday: Boolean
     get() = this == year.easterSunday.plusDays(1)
 
 val Int.easterSunday: LocalDate
-    get() {
-        if (this < 1 || this > 9999) throw IllegalArgumentException("Year out of bounds!")
-        var result = easterEggs[this]
-        if (result != null) return result
-        val a = this % 19
-        val b = this / 100
-        val c = this % 100
-        val d = b / 4
-        val e = b % 4
-        val g = (8 * b + 13) / 25
-        val h = (19 * a + b - d - g + 15) % 30
-        val j = c / 4
-        val k = c % 4
-        val m = (a + 11 * h) / 319
-        val r = (2 * e + 2 * j - k - h + m + 32) % 7
-        val n = (h - m + r + 90) / 25
-        val p = (h - m + r + n + 19) % 32
-        result = LocalDate.of(this, n, p)
-        return result.also { easterEggs[this] = result }
-    }
+    get() = if (this < 1 || this > 9999) throw IllegalArgumentException("Year out of bounds!")
+    else easterEggs[this] ?: computeEasterSunday().also { easterEggs[this] = it }
+
+private fun Int.computeEasterSunday(): LocalDate {
+    val a = this % 19
+    val b = this / 100
+    val c = this % 100
+    val d = (19 * a + b - (b / 4) - ((8 * b + 13) / 25) + 15) % 30
+    val e = (a + 11 * d) / 319
+    val f = (2 * (b % 4) + 2 * (c / 4) - (c % 4) - d + e + 32) % 7
+    val month = (d - e + f + 90) / 25
+    val day = (d - e + f + month + 19) % 32
+    return LocalDate.of(this, month, day)
+}
 
 private val easterEggs = WeakHashMap<Int, LocalDate>()
 
