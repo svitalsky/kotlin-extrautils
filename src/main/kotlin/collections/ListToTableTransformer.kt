@@ -68,7 +68,7 @@ class ListToTableTransformer {
             mkIndexPattern().forEach { rowIndexes ->
                 mutableListOf<T>().apply {
                     rowIndexes.forEach { index ->
-                        if (index in 0 until list.size) add(itemTransformer(list[index]))
+                        if (index in list.indices) add(itemTransformer(list[index]))
                         else add(empty)
                     }
                 }.also { add(rowTransformer(it.toList())) }
@@ -108,28 +108,17 @@ class ListToTableTransformer {
     fun startPadding(value: Int) = apply { startPadding = value }
 
     private fun validateInputs() {
-        if (tableHeight == 0 && tableWidth == 0) {
-            throw IllegalArgumentException("Either table width or table height (or both) must be given!")
+        require(!(tableHeight == 0 && tableWidth == 0)) {
+            "Either table width or table height (or both) must be given!"
         }
-        if (tableWidth < 0) {
-            throw IllegalArgumentException("Table width must be a positive number!")
-        }
-        if (tableHeight < 0) {
-            throw IllegalArgumentException("Table height must be a positive number!")
-        }
-        if (listSize <= 0) {
-            throw IllegalArgumentException("List size must be given and positive!")
-        }
-        if (_fillingType == null) {
-            throw IllegalArgumentException("Filling type must be given!")
-        }
-        if (startPadding < 0) {
-            throw IllegalArgumentException("Start padding must be zero or positive!")
-        }
-        if (tableHeight > 0 && tableWidth > 0 &&
-            (listSize + startPadding) > (tableHeight * tableWidth))
-        {
-            throw IllegalArgumentException("Given table height and width are too small for given list size!")
+        require(tableWidth >= 0) { "Table width must be a positive number!" }
+        require(tableHeight >= 0) { "Table height must be a positive number!" }
+        require(listSize > 0) { "List size must be given and positive!" }
+        requireNotNull(_fillingType) { "Filling type must be given!" }
+        require(startPadding >= 0) { "Start padding must be zero or positive!" }
+        require(!(tableHeight > 0 && tableWidth > 0 &&
+                (listSize + startPadding) > (tableHeight * tableWidth))) {
+            "Given table height and width are too small for given list size!"
         }
     }
 

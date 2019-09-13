@@ -22,60 +22,14 @@ import java.util.concurrent.atomic.AtomicBoolean
  * This class is not about null safety but about knowing whether some
  * value — even null value! — has been set (is available &c.) or not.
  */
-class OptionalValue<out E> {
-
-    companion object {
-        private val empty = OptionalValue<Any?>()
-
-        /**
-         * Returns an empty instance (the only existing empty instance, under normal
-         * circumstances) of OptionalValue cast to proper type.
-         */
-        @Suppress("UNCHECKED_CAST")
-        fun <E> empty() = empty as OptionalValue<E>
-
-        /**
-         * Returns OptionalValue with its `value` set to the provided value.
-         */
-        fun <E> of(value: E) = OptionalValue(value)
-    }
-
-    private val _value: E?
-
-    /**
-     * `False` for an empty OptionalValue, otherwise `true`.
-     * @see isEmpty
-     */
-    val valueSet: Boolean
-
-    /**
-     * Opposite of `valueSet`.
-     * @see valueSet
-     */
-    val isEmpty
-        get() = ! valueSet
-
-    /**
-     * For an empty OptionalValue throws `NoSuchElementException`, otherwise contains the value
-     * of this OptionalValue.
-     *
-     * @throws NoSuchElementException when empty
-     */
-    @Suppress("UNCHECKED_CAST")
+class OptionalValue<E> private constructor(private val _value: E, val valueSet: Boolean = true){
     val value: E
-        get() =
-            if (valueSet) _value as E
-            else throw NoSuchElementException(NO_VALUE_AVAILABLE)
+        get() = if (valueSet) _value
+                else throw NoSuchElementException(NO_VALUE_AVAILABLE)
 
-    private constructor() {
-        _value = null
-        valueSet = false
-    }
+    fun orElse(defaultValue: E): E = if (valueSet) _value else defaultValue
 
-    private constructor(e: E) {
-        _value = e
-        valueSet = true
-    }
+    fun orElseGet(defaultSupplier: () -> E): E = if (valueSet) _value else defaultSupplier()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -88,7 +42,23 @@ class OptionalValue<out E> {
     override fun hashCode() = valueSet.hashCode() + if (valueSet) 31 * (_value?.hashCode() ?: 0) else 0
 
     override fun toString() =
-        "OptionalValue${if (valueSet) "(" + _value.toString() + ")" else "<<<#-VALUE NOT SET-#>>>"}"
+        "OptionalValue${if (valueSet) "(${_value.toString()})" else "<VALUE NOT SET>"}"
+
+    companion object {
+        private val NONE = OptionalValue<Any?>(_value = null, valueSet = false)
+
+        /**
+         * Returns an empty instance (the only existing empty instance, under normal
+         * circumstances) of OptionalValue cast to proper type.
+         */
+        @Suppress("UNCHECKED_CAST")
+        fun <E> none() = NONE as OptionalValue<E>
+
+        /**
+         * Returns OptionalValue with its `value` set to the provided value.
+         */
+        fun <E> of(value: E) = OptionalValue(_value = value)
+    }
 }
 
 
