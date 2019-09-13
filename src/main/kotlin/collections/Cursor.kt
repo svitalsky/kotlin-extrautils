@@ -38,7 +38,7 @@ private open class CursorBasic<out E>(protected val iterator: Iterator<E>) : Cur
 
     private val current: LazyVar<OptionalValue<E>> = LazyVar.by {
         if (iterator.hasNext()) OptionalValue.of(iterator.next())
-        else OptionalValue.empty()
+        else OptionalValue.none()
     }
 
     override fun hasNext() = current.value.valueSet
