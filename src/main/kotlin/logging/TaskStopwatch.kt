@@ -70,7 +70,7 @@ interface TaskStopwatch {
      * @return running time nicely formatted
      * @throws IllegalStateException in case of calling on not yet started stopwatch.
      */
-    fun formatted(): String
+    val formatted: String
 }
 
 
@@ -91,7 +91,8 @@ private open class TaskStopwatchBasic(started: Boolean = false) : TaskStopwatch 
         if (_started.get()) System.nanoTime() - startTime
         else throw IllegalStateException(STOPWATCH_NOT_YET_STARTED)
 
-    override fun formatted() = formatDuration()
+    override val formatted
+        get() = formatDuration()
 }
 
 
@@ -112,5 +113,6 @@ internal fun TaskStopwatch.formatDuration() = time().let {
 private class SynchronizedTaskStopwatch(started: Boolean = false) : TaskStopwatchBasic(started) {
     override fun start()     = sync { super.start() }
     override fun time()      = sync { super.time() }
-    override fun formatted() = sync { super.formatted() }
+    override val formatted
+        get() = sync { super.formatted }
 }
