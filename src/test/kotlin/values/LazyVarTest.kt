@@ -35,7 +35,7 @@ class LazyVarTest {
 
     @Test
     fun getAndReset() {
-        val testee = LazyVar.by { intIt.next() }
+        val testee = LazyVar by { intIt.next() }
         list.forEach {
             assertEquals(it, testee.getAndReset())
         }
@@ -43,7 +43,7 @@ class LazyVarTest {
 
     @Test
     fun getValue() {
-        val testee = LazyVar.by { intIt.next() }
+        val testee = LazyVar by { intIt.next() }
         assertEquals(1, testee.value)
         assertEquals(1, testee.value)
         assertEquals(1, testee.getAndReset())
@@ -54,7 +54,7 @@ class LazyVarTest {
 
     @Test
     fun getValueSynced() {
-        val testeeSynced = LazyVar.synchronized { intIt.next() }
+        val testeeSynced = LazyVar bySynchronized { intIt.next() }
         assertEquals(1, testeeSynced.value)
         assertEquals(1, testeeSynced.value)
         assertEquals(1, testeeSynced.getAndReset())
@@ -65,7 +65,7 @@ class LazyVarTest {
 
     @Test
     fun reset() {
-        val testee = LazyVar.by { intIt.next() }
+        val testee = LazyVar by { intIt.next() }
         assertEquals(1, testee.value)
         assertEquals(1, testee.value)
         testee.reset()
