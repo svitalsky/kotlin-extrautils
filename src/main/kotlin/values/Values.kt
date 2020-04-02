@@ -93,13 +93,13 @@ interface LazyVar<out E> {
         /**
          * Creates a LazyVar that can be repeatedly initialized by the supplier.
          */
-        fun <E> by(supplier: () -> E): LazyVar<E> = LazyVarBase(supplier)
+        infix fun <E> by(supplier: () -> E): LazyVar<E> = LazyVarBase(supplier)
 
         /**
          * Creates a synchronized version of a LazyVar.
          * @see by
          */
-        fun <E> synchronized(supplier: () -> E) : LazyVar<E> =
+        infix fun <E> bySynchronized(supplier: () -> E) : LazyVar<E> =
                 object : LazyVarBase<E>(supplier) {
                     override val value: E
                         get() = sync { super.value }
