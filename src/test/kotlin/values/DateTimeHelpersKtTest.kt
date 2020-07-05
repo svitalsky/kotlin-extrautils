@@ -21,6 +21,7 @@ import org.junit.Assert.*
 import org.junit.Test
 import org.junit.rules.ExpectedException
 import java.time.*
+import java.time.LocalDate.now
 import java.time.Month.*
 
 class DateTimeHelpersKtTest {
@@ -297,5 +298,45 @@ class DateTimeHelpersKtTest {
     fun parsedHttpDatetimeTest() {
         val zoned = ZonedDateTime.of(2018, 12, 26, 18, 14, 23, 0, ZoneId.of("Europe/Prague"))
         assertEquals(zoned.withZoneSameInstant(ZoneId.of("GMT")), zoned.httpFormatted.parsedHttpDatetime)
+    }
+
+    @Test
+    fun monthlyCursorDefaultEnd() {
+        val today = now()
+        var cursor = MonthlyCursor(start = today.minusDays(60))
+        assertTrue(cursor.hasNext)
+        while (cursor.hasNext) cursor.shift()
+        assertEquals(today.withDayOfMonth(1), cursor.firstDay)
+        assertEquals(today, cursor.lastDay)
+        cursor = MonthlyCursor(start = today)
+        assertFalse(cursor.hasNext)
+        assertEquals(today, cursor.lastDay)
+    }
+
+    @Test
+    fun monthlyCursorGivenEnd() {
+        val cursor = MonthlyCursor(start = LocalDate.of(2020, 1, 15), end = LocalDate.of(2020, 3, 25))
+        assertEquals(15, cursor.firstDay.dayOfMonth)
+        assertTrue(cursor.hasNext)
+        cursor.shift()
+        assertEquals(1, cursor.firstDay.dayOfMonth)
+        assertEquals(29, cursor.lastDay.dayOfMonth)
+        assertTrue(cursor.hasNext)
+        cursor.shift()
+        assertFalse(cursor.hasNext)
+        assertEquals(25, cursor.lastDay.dayOfMonth)
+    }
+
+    @Test
+    fun yearMonthLastDay() {
+        assertEquals(31, YearMonth.of(2020, 1).lastDay.dayOfMonth)
+        assertEquals(29, YearMonth.of(2020, 2).lastDay.dayOfMonth)
+    }
+
+    @Test
+    fun wrongMonthlyCursor() {
+        thrown.expect(AssertionError::class.java)
+        thrown.expectMessage("Start cannot be after end!")
+        MonthlyCursor(start = now().plusDays(33))
     }
 }
