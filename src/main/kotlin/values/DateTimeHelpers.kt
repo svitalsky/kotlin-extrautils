@@ -20,6 +20,7 @@ package cz.mpts.libs.extrautils.kotlin.values
 import cz.mpts.libs.extrautils.kotlin.*
 import cz.mpts.libs.extrautils.kotlin.collections.Cursor
 import java.time.*
+import java.time.LocalDate.now
 import java.time.Month.*
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -167,3 +168,40 @@ val nowHttpFormatted
 
 val String.parsedHttpDatetime: ZonedDateTime
     get() = httpDatetimeFormatter.parse(this, ZonedDateTime::from)
+
+val YearMonth.lastDay
+    get() = LocalDate.of(year, month, lengthOfMonth())
+
+/**
+ * Walks over period given by start and end (defaults to today) by month long steps,
+ * returning first and last day of each step.
+ */
+class MonthlyCursor(start: LocalDate, end: LocalDate? = null) {
+    // Java needs this one
+    constructor(start: LocalDate) : this(start = start, end = now())
+
+    init {
+        assert(!start.isAfter(end ?: now())) {
+            "Start cannot be after end!"
+        }
+    }
+
+    var firstDay = start
+        private set
+
+    private val realEnd = end ?: now()
+    private val last = YearMonth.from(realEnd)
+
+    private val cursor
+        get() = YearMonth.from(firstDay)
+
+    val lastDay
+        get() = if (hasNext) cursor.lastDay else realEnd
+
+    val hasNext
+        get() = cursor < last
+
+    fun shift() {
+        if (hasNext) firstDay = lastDay.plusDays(1)
+    }
+}

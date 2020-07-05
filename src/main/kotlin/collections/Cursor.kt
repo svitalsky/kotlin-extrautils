@@ -68,8 +68,8 @@ fun <E> Iterable<E>.synchronizedCursor() : Cursor<E> =
 
 
 /**
- * Returns cursor for any object having an iterator, be it native implementation
- * or an extension function
+ * Returns cursor for any object having an iterator, be it native implementation,
+ * an extension function or a common outer function
  */
 @Suppress("unused")
 fun <E> E.cursor(iterator: Iterator<E>) : Cursor<E> = CursorBasic(iterator = iterator)
