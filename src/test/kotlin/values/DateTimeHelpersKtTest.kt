@@ -339,4 +339,16 @@ class DateTimeHelpersKtTest {
         thrown.expectMessage("Start cannot be after end!")
         MonthlyCursor(start = now().plusDays(33))
     }
+
+    @Test
+    fun isYesterday() {
+        assertFalse(now().isYesterday)
+        assertTrue(now().minusDays(1).isYesterday)
+    }
+
+    @Test
+    fun isTomorrow() {
+        assertFalse(now().isTomorrow)
+        assertTrue(now().plusDays(1).isTomorrow)
+    }
 }

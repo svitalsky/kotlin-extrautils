@@ -158,6 +158,12 @@ val LocalDate.previousCzechWeekDay: LocalDate
         cursor
     } else this
 
+val LocalDate.isYesterday
+    get() = this == now().minusDays(1)
+
+val LocalDate.isTomorrow
+    get() = this == now().plusDays(1)
+
 val httpDatetimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
 
 val ZonedDateTime.httpFormatted
