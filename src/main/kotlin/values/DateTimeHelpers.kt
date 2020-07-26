@@ -182,9 +182,7 @@ val YearMonth.lastDay
  * Walks over period given by start and end (defaults to today) by month long steps,
  * returning first and last day of each step.
  */
-class MonthlyCursor(start: LocalDate, end: LocalDate? = null) {
-    // Java needs this one
-    constructor(start: LocalDate) : this(start = start, end = now())
+class MonthlyCursor @JvmOverloads constructor(start: LocalDate, end: LocalDate? = null) {
 
     init {
         assert(!start.isAfter(end ?: now())) {
