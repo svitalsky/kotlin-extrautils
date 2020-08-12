@@ -16,7 +16,10 @@
 package cz.mpts.libs.extrautils.kotlin.logging
 
 import cz.mpts.libs.extrautils.kotlin.*
+import java.math.*
+import java.math.RoundingMode.HALF_UP
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.math.truncate
 
 /**
  * Stopwatch useful for measuring tasks durations and such.
@@ -71,6 +74,16 @@ interface TaskStopwatch {
      * @throws IllegalStateException in case of calling on not yet started stopwatch.
      */
     val formatted: String
+
+
+    /**
+     * Returns the time this stopwatch has been running nicely formatted, including
+     * minutes and hours.
+     *
+     * @return running time nicely formatted
+     * @throws IllegalStateException in case of calling on not yet started stopwatch.
+     */
+    val formattedLong: String
 }
 
 
@@ -93,8 +106,10 @@ private open class TaskStopwatchBasic(started: Boolean = false) : TaskStopwatch 
 
     override val formatted
         get() = formatDuration()
-}
 
+    override val formattedLong
+        get() = formatLongDuration()
+}
 
 internal fun TaskStopwatch.formatDuration() = time().let {
     when {
@@ -109,10 +124,51 @@ internal fun TaskStopwatch.formatDuration() = time().let {
     }
 }
 
+internal fun TaskStopwatch.formatLongDuration() = time().let {
+    if (it < 1_000_000_000) formatDuration()
+    else {
+        val msec = (it.toDouble() / 1_000_000_000.0).round(2)
+        when {
+            msec < 60.0 -> "$msec s"
+            msec < 3_600.0 -> msec.minSec
+            msec < 3_600.0 * 24 -> msec.hourMinSec
+            else -> msec.dayHourMinSec
+        }
+    }
+}
+
+private val Double.minSec: String
+    get() {
+        val intPart = truncate(this).toInt()
+        val mins = intPart / 60
+        return "$mins m ${(this - (mins * 60)).round(2)} s"
+    }
+
+private val Double.hourMinSec: String
+    get() {
+        val intPart = truncate(this).toInt()
+        val hours = intPart / 3_600
+        val mins = (intPart - (hours * 3_600)) / 60
+        return "$hours h $mins m ${(this - (hours * 3_600) - (mins * 60)).round(2)} s"
+    }
+
+private val Double.dayHourMinSec: String
+    get() {
+        val intPart = truncate(this).toInt()
+        val days = intPart / (24 * 3_600)
+        val hours = (intPart - (days * 24 * 3_600)) / 3_600
+        val mins = (intPart - (days * 24 * 3_600) - (hours * 3_600)) / 60
+        return "$days d $hours h $mins m" +
+                " ${(this - (days * 24 * 3_600) - (hours * 3_600) - (mins * 60)).round(2)} s"
+    }
+
+private fun Double.round(scale: Int) = BigDecimal(this).setScale(scale, HALF_UP).toDouble()
 
 private class SynchronizedTaskStopwatch(started: Boolean = false) : TaskStopwatchBasic(started) {
     override fun start()     = sync { super.start() }
     override fun time()      = sync { super.time() }
     override val formatted
         get() = sync { super.formatted }
+    override val formattedLong
+        get() = sync { super.formattedLong }
 }
