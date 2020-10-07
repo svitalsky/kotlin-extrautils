@@ -27,9 +27,9 @@ import org.junit.runners.Suite.SuiteClasses
 @SuiteClasses(
     CollectionFunctionsKtTest::class,
     CursorTest::class,
-    DateTimeHelpersKtTest::class,
+    DateTimeHelpersTest::class,
     LazyVarTest::class,
-    NumberHelpersKtTest::class,
+    NumberHelpersTest::class,
     OptionalValueTest::class,
     TaskStopwatchTest::class,
     ListToTableTransformerTest::class

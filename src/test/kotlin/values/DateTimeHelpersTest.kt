@@ -24,7 +24,7 @@ import java.time.*
 import java.time.LocalDate.now
 import java.time.Month.*
 
-class DateTimeHelpersKtTest {
+class DateTimeHelpersTest {
 
     @Rule
     @JvmField

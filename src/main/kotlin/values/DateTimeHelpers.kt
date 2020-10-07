@@ -182,7 +182,7 @@ val YearMonth.lastDay
  * Walks over period given by start and end (defaults to today) by month long steps,
  * returning first and last day of each step.
  */
-class MonthlyCursor @JvmOverloads constructor(start: LocalDate, end: LocalDate? = null) {
+class MonthlyCursor @JvmOverloads constructor(start: LocalDate, end: LocalDate? = null) : ClosedRange<LocalDate> {
 
     init {
         assert(!start.isAfter(end ?: now())) {
@@ -208,4 +208,10 @@ class MonthlyCursor @JvmOverloads constructor(start: LocalDate, end: LocalDate? 
     fun shift() {
         if (hasNext) firstDay = lastDay.plusDays(1)
     }
+
+    override val start
+        get() = firstDay
+
+    override val endInclusive
+        get() = lastDay
 }
