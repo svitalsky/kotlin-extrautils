@@ -23,6 +23,16 @@ import kotlin.math.truncate
 
 /**
  * Stopwatch useful for measuring tasks durations and such.
+ *
+ * Typical usage:
+ *
+ *     TaskStopwatch.createStarted then {
+ *         doSomeWork()
+ *     } then {
+ *         doMoreWork()
+ *     } eventually { stopwatch ->
+ *         logger.info("All work done in ${stopwatch.formatted}.")
+ *     }
  */
 interface TaskStopwatch {
 
@@ -85,6 +95,19 @@ interface TaskStopwatch {
      */
     val formattedLong: String
 }
+
+/**
+ * @see TaskStopwatch
+ */
+inline infix fun TaskStopwatch.then(f: () -> Any): TaskStopwatch = run {
+    f()
+    this
+}
+
+/**
+ * @see TaskStopwatch
+ */
+inline infix fun <T> TaskStopwatch.eventually(crossinline f: (stopwatch: TaskStopwatch) -> T) = f(this)
 
 
 private open class TaskStopwatchBasic(started: Boolean = false) : TaskStopwatch {
