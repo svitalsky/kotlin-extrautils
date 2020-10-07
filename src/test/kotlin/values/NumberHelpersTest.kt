@@ -25,7 +25,7 @@ import java.math.BigDecimal.ONE
 import java.math.BigDecimal.TEN
 import kotlin.test.assertTrue
 
-class NumberHelpersKtTest {
+class NumberHelpersTest {
 
     @Test
     fun isZero() {
