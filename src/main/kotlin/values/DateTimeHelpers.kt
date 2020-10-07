@@ -63,6 +63,19 @@ operator fun ClosedRange<LocalDate>.iterator() =
 
 
 /**
+ * Allows adding two closed ranges of LocalDates together, providing the second follows the first
+ * without interruption.
+ */
+operator fun ClosedRange<LocalDate>.plus(other: ClosedRange<LocalDate>): ClosedRange<LocalDate> {
+    var firstEnd = endInclusive
+    if (++firstEnd != other.start) {
+        throw IllegalArgumentException("Cannot add range that is not a direct continuation of the current one!")
+    }
+    return start..other.endInclusive
+}
+
+
+/**
  * Adds an Iterator for a YearMonth ClosedRange.
  */
 @JvmName("yearMonthIterator")
