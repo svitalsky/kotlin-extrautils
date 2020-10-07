@@ -99,10 +99,7 @@ interface TaskStopwatch {
 /**
  * @see TaskStopwatch
  */
-inline infix fun TaskStopwatch.then(f: () -> Any): TaskStopwatch = run {
-    f()
-    this
-}
+inline infix fun TaskStopwatch.then(f: () -> Any): TaskStopwatch = this.also { f() }
 
 /**
  * @see TaskStopwatch
