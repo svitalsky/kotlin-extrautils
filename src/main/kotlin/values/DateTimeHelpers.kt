@@ -98,6 +98,9 @@ fun ClosedRange<LocalDate>.cursor() =
                 else throw NoSuchElementException(NO_MORE_DAYS_AVAILABLE)
         }
 
+private const val EFFECTIVE_START = 2001
+private const val GOOD_FRIDAY_ADDED = 2016
+
 /*
  * Valid as of 2018.
  * As they create more holidays or change the existing ones, we shall modify this
@@ -105,16 +108,32 @@ fun ClosedRange<LocalDate>.cursor() =
  */
 val LocalDate.isCzechHoliday: Boolean
     get() = if (dayOfWeek.value in (6..7)) true
-    else when (month) {
-        JANUARY -> dayOfMonth == 1
-        MARCH, APRIL -> easterFriday || easterMonday
-        MAY -> dayOfMonth == 1 || dayOfMonth == 8
-        JULY -> dayOfMonth in (5..6)
-        SEPTEMBER -> dayOfMonth == 28
-        OCTOBER -> dayOfMonth == 28
-        NOVEMBER -> dayOfMonth == 17
-        DECEMBER -> dayOfMonth in (24..26)
-        else -> false
+    else when  {
+        this.year >= GOOD_FRIDAY_ADDED ->
+            when (month) {
+                JANUARY -> dayOfMonth == 1
+                MARCH, APRIL -> easterFriday || easterMonday
+                MAY -> dayOfMonth == 1 || dayOfMonth == 8
+                JULY -> dayOfMonth in (5..6)
+                SEPTEMBER -> dayOfMonth == 28
+                OCTOBER -> dayOfMonth == 28
+                NOVEMBER -> dayOfMonth == 17
+                DECEMBER -> dayOfMonth in (24..26)
+                else -> false
+            }
+        this.year >= EFFECTIVE_START ->
+            when (month) {
+                JANUARY -> dayOfMonth == 1
+                MARCH, APRIL -> easterMonday
+                MAY -> dayOfMonth == 1 || dayOfMonth == 8
+                JULY -> dayOfMonth in (5..6)
+                SEPTEMBER -> dayOfMonth == 28
+                OCTOBER -> dayOfMonth == 28
+                NOVEMBER -> dayOfMonth == 17
+                DECEMBER -> dayOfMonth in (24..26)
+                else -> false
+            }
+        else -> throw IllegalArgumentException("This date is not supported!")
     }
 
 val LocalDate.easterFriday: Boolean
