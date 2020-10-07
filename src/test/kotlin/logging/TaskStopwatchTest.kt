@@ -194,4 +194,32 @@ class TaskStopwatchTest {
         Mockito.`when`(taskStopwatch.time()).thenReturn(duration)
         assertEquals(expected, taskStopwatch.formatLongDuration())
     }
+
+    @Test
+    fun thenEventually() {
+        Mockito.`when`(taskStopwatch.time()).thenReturn(10_500)
+        assertEquals("It is 10.50 µs",
+                     taskStopwatch then {
+                         println("working hard")
+                     } then {
+                         println("still pretending to be working hard")
+                     } eventually { "It is ${it.formatDuration()}" })
+    }
+
+    @Test
+    fun thenEventually2() {
+        assertTrue(TaskStopwatch.createStarted() then {
+            Thread.sleep(10L)
+        } eventually { stopwatch ->
+            stopwatch.time()//.also { time -> println(time) }
+        } > 10_000_000L )
+    }
+
+    @Test
+    fun thenEventuallyNonLocalReturn() {
+        assertEquals(2, doIt(false))
+        assertEquals(3, doIt(true))
+    }
+
+    private fun doIt(param: Boolean) = TaskStopwatch.createStarted() then { if (param) return 3 } eventually { 2 }
 }
