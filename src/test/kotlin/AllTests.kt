@@ -17,6 +17,7 @@ package cz.mpts.libs.extrautils.kotlin
 
 import cz.mpts.libs.extrautils.kotlin.collections.*
 import cz.mpts.libs.extrautils.kotlin.logging.TaskStopwatchTest
+import cz.mpts.libs.extrautils.kotlin.text.BasicTokenizerTest
 import cz.mpts.libs.extrautils.kotlin.values.*
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
@@ -32,6 +33,7 @@ import org.junit.runners.Suite.SuiteClasses
     NumberHelpersTest::class,
     OptionalValueTest::class,
     TaskStopwatchTest::class,
-    ListToTableTransformerTest::class
+    ListToTableTransformerTest::class,
+    BasicTokenizerTest::class
 )
 class AllTests
