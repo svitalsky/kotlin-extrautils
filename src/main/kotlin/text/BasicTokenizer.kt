@@ -1,17 +1,24 @@
+/*
+ * Copyright © 2017–2020 Marcel Svitalsky
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package cz.mpts.libs.extrautils.kotlin.text
 
 private class FlaggedPart(val text: String, val quoted: Boolean)
 
-private val blanks = "\\s+".toRegex()
-
-private val String.tokenizedSimple
-    get() = trim().split(blanks)
-
 private fun Char.significantQuote(escaped: Boolean) =
     !escaped && (this == '"')
-
-private val MutableList<Char>.getString
-    get() = String(toCharArray()).also { clear() }
 
 private fun startingQuotes(txt: String, index: Int, inQuotes: Boolean) =
     !inQuotes && ((index == 0) || txt[index - 1].isWhitespace())
@@ -32,6 +39,9 @@ private fun MutableList<Char>.processChar(c: Char, escaping: Boolean) =
         if (!willBeEscaping) checkEscapeAndAdd(c, escaping)
     }
 
+private val MutableList<Char>.getString
+    get() = String(toCharArray()).also { clear() }
+
 private fun MutableList<FlaggedPart>.addFlaggedPart(buffer: MutableList<Char>,
                                                     isQuoted: Boolean = false) =
     apply {
@@ -46,6 +56,11 @@ private fun MutableList<Char>.onFinish(inQuotes: Boolean, escaping: Boolean) =
         if (inQuotes) add(0, '"')
         if (escaping) add('\\')
     }
+
+private val blanks = "\\s+".toRegex()
+
+private val String.tokenizedSimple
+    get() = trim().split(blanks)
 
 private val List<FlaggedPart>.result
     get() = flatMap { part ->
@@ -71,10 +86,8 @@ private fun doTokenize(txt: String) : List<String> {
     return partsFlagged.addFlaggedPart(buffer.onFinish(inQuotes, escaping), false).result
 }
 
-private fun tokenize(txt: String) = with (txt.trim()) {
-    if (isEmpty()) emptyList()
-    else doTokenize(this)
-}
-
 val String.tokenized
-    get() = tokenize(this)
+    get() = with (trim()) {
+        if (isEmpty()) emptyList()
+        else doTokenize(this)
+    }
