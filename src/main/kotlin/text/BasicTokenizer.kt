@@ -17,6 +17,46 @@ package cz.mpts.libs.extrautils.kotlin.text
 
 private class FlaggedPart(val text: String, val quoted: Boolean)
 
+@Suppress("unused")
+private class WorkingData(var inQuotes: Boolean = false,
+                          var escaping: Boolean = false,
+                          val buffer: MutableList<Char> = mutableListOf())
+{
+    fun switchInQuotes() {
+        inQuotes = !inQuotes
+    }
+
+    private val Char.nonEscapable
+        get() = this != '"' && this != '\\'
+
+    private fun checkEscapeAndAdd(c: Char) {
+        if (escaping && c.nonEscapable) buffer.add('\\')
+        buffer.add(c)
+    }
+
+    fun processChar(c: Char) {
+        escaping = (c == '\\' && !escaping).also { willBeEscaping ->
+            if (!willBeEscaping) checkEscapeAndAdd(c)
+        }
+    }
+
+    val bufferAsString
+        get() = String(buffer.toCharArray()).also { buffer.clear() }
+
+    val empty
+        get() = buffer.isEmpty()
+
+    val nonEmpty
+        get() = buffer.isNotEmpty()
+
+    fun onFinish() = apply {
+        if (inQuotes) buffer.add(0, '"')
+        if (escaping) buffer.add('\\')
+    }
+
+    fun addChar(c: Char) = buffer.add(c)
+}
+
 private fun Char.significantQuote(escaped: Boolean) =
     !escaped && (this == '"')
 
@@ -26,35 +66,13 @@ private fun startingQuotes(txt: String, index: Int, inQuotes: Boolean) =
 private fun closingQuotes(txt: String, index: Int, inQuotes: Boolean) =
     inQuotes && ((index == (txt.length - 1)) || txt[index + 1].isWhitespace())
 
-private val Char.nonEscapable
-    get() = this != '"' && this != '\\'
-
-private fun MutableList<Char>.checkEscapeAndAdd(c: Char, escaping: Boolean) {
-    if (escaping && c.nonEscapable) add('\\')
-    add(c)
-}
-
-private fun MutableList<Char>.processChar(c: Char, escaping: Boolean) =
-    (c == '\\' && !escaping).also { willBeEscaping ->
-        if (!willBeEscaping) checkEscapeAndAdd(c, escaping)
-    }
-
-private val MutableList<Char>.getString
-    get() = String(toCharArray()).also { clear() }
-
-private fun MutableList<FlaggedPart>.addFlaggedPart(buffer: MutableList<Char>,
+private fun MutableList<FlaggedPart>.addFlaggedPart(data: WorkingData,
                                                     isQuoted: Boolean = false) =
-    apply {
-        if (buffer.isNotEmpty()) {
-            val s = buffer.getString
+    data.run {
+        if (nonEmpty) {
+            val s = bufferAsString
             if (s.isNotBlank() || isQuoted) add(FlaggedPart(s, isQuoted))
         }
-    }
-
-private fun MutableList<Char>.onFinish(inQuotes: Boolean, escaping: Boolean) =
-    apply {
-        if (inQuotes) add(0, '"')
-        if (escaping) add('\\')
     }
 
 private val blanks = "\\s+".toRegex()
@@ -68,22 +86,21 @@ private val List<FlaggedPart>.result
         else part.text.tokenizedSimple
     }
 
-private fun doTokenize(txt: String) : List<String> {
-    var inQuotes = false
-    var escaping = false
-    val partsFlagged = mutableListOf<FlaggedPart>()
-    val buffer = mutableListOf<Char>()
-    txt.forEachIndexed { index, c ->
-        if (c.significantQuote(escaping)) {
-            if (startingQuotes(txt, index, inQuotes) || closingQuotes(txt, index, inQuotes)) {
-                partsFlagged.addFlaggedPart(buffer, inQuotes)
-                inQuotes = !inQuotes
+private fun doTokenize(txt: String) = mutableListOf<FlaggedPart>().run {
+    WorkingData().let { data ->
+        txt.forEachIndexed { index, c ->
+            if (c.significantQuote(data.escaping)) {
+                if (startingQuotes(txt, index, data.inQuotes) || closingQuotes(txt, index, data.inQuotes)) {
+                    addFlaggedPart(data, data.inQuotes)
+                    data.switchInQuotes()
+                }
+                else data.addChar(c)
             }
-            else buffer.add(c)
+            else data.processChar(c)
         }
-        else escaping = buffer.processChar(c, escaping)
+        addFlaggedPart(data.onFinish(), false)
     }
-    return partsFlagged.addFlaggedPart(buffer.onFinish(inQuotes, escaping), false).result
+    result
 }
 
 val String.tokenized
