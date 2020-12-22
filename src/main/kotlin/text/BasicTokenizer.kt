@@ -86,7 +86,7 @@ private val List<FlaggedPart>.result
         else part.text.tokenizedSimple
     }
 
-private fun doTokenize(txt: String) = mutableListOf<FlaggedPart>().run {
+private fun tokenize(txt: String) = mutableListOf<FlaggedPart>().run {
     WorkingData().let { data ->
         txt.forEachIndexed { index, c ->
             if (c.significantQuote(data.escaping)) {
@@ -106,5 +106,5 @@ private fun doTokenize(txt: String) = mutableListOf<FlaggedPart>().run {
 val String.tokenized
     get() = with (trim()) {
         if (isEmpty()) emptyList()
-        else doTokenize(this)
+        else tokenize(this)
     }
