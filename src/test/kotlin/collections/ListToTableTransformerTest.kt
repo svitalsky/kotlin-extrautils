@@ -164,4 +164,15 @@ class ListToTableTransformerTest {
                          list.joinToString()
                      })
     }
+
+    @Test
+    fun specialSize() {
+        val transformer = ListToTableTransformer().listSize(5).startPadding(1).fillingType(TOP_LEFT_TO_BOTTOM).tableHeight(5)
+        val expected = listOf(listOf(null, 6),
+                              listOf(2, null),
+                              listOf(3, null),
+                              listOf(4, null),
+                              listOf(5, null))
+        assertEquals(expected, transformer.mkTableSource(listOf(2, 3, 4, 5, 6)))
+    }
 }
