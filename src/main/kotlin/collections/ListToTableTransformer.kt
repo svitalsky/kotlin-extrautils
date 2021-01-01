@@ -125,8 +125,9 @@ class ListToTableTransformer {
     private fun countTableDimensions() {
         if (tableWidth == 0 || tableHeight == 0) {
             val given = if (tableHeight == 0) tableWidth else tableHeight
-            var other = listSize / given
-            if (listSize % given != 0) other++
+            val numberOfItems = listSize + startPadding
+            var other = numberOfItems / given
+            if (numberOfItems % given != 0) other++
             if (tableHeight == 0) tableHeight = other else tableWidth = other
         }
     }
