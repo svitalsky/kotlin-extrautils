@@ -16,17 +16,11 @@
 package cz.mpts.libs.extrautils.kotlin.values
 
 import cz.mpts.libs.extrautils.kotlin.NO_VALUE_AVAILABLE
-import org.junit.*
 import org.junit.Assert.*
-import org.junit.rules.ExpectedException
+import org.junit.Test
 import java.math.BigDecimal
 
-
 class OptionalValueTest {
-
-    @Rule
-    @JvmField
-    val thrown: ExpectedException = ExpectedException.none()
 
     @Test
     fun getValueSet() {
@@ -43,9 +37,8 @@ class OptionalValueTest {
 
     @Test
     fun getValueUnset() {
-        thrown.expect(NoSuchElementException::class.java)
-        thrown.expectMessage(NO_VALUE_AVAILABLE)
-        OptionalValue.none<Any>().value
+        val exc = assertThrows(NoSuchElementException::class.java) { OptionalValue.none<Any>().value }
+        assertEquals(NO_VALUE_AVAILABLE, exc.message)
     }
 
     @Suppress("ReplaceCallWithComparison")

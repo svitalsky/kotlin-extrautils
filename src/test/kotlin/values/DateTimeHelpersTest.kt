@@ -16,19 +16,13 @@
 package cz.mpts.libs.extrautils.kotlin.values
 
 import cz.mpts.libs.extrautils.kotlin.*
-import org.junit.*
 import org.junit.Assert.*
 import org.junit.Test
-import org.junit.rules.ExpectedException
 import java.time.*
 import java.time.LocalDate.now
 import java.time.Month.*
 
 class DateTimeHelpersTest {
-
-    @Rule
-    @JvmField
-    val thrown: ExpectedException = ExpectedException.none()
 
     @Test
     fun inc() {
@@ -82,23 +76,22 @@ class DateTimeHelpersTest {
 
     @Test
     fun iteratorOverflow() {
-        thrown.expect(NoSuchElementException::class.java)
-        thrown.expectMessage(NO_MORE_DAYS_AVAILABLE)
         val first = LocalDate.of(2018, 3, 30)
         val last = LocalDate.of(2018, 3, 31)
         val iterator = (first..last).iterator()
-        for (ignore in (1..5)) iterator.next()
+        for (ignore in (1..2)) iterator.next()
+        val exc = assertThrows(NoSuchElementException::class.java) { iterator.next() }
+        assertEquals(NO_MORE_DAYS_AVAILABLE, exc.message)
     }
 
 
     @Test
     fun iteratorOnEmpty() {
-        thrown.expect(NoSuchElementException::class.java)
-        thrown.expectMessage(NO_MORE_DAYS_AVAILABLE)
         val first = LocalDate.of(2018, 3, 30)
         val last = LocalDate.of(2018, 3, 29)
         val iterator = (first..last).iterator()
-        iterator.next()
+        val exc = assertThrows(NoSuchElementException::class.java) { iterator.next() }
+        assertEquals(NO_MORE_DAYS_AVAILABLE, exc.message)
     }
 
 
@@ -129,23 +122,22 @@ class DateTimeHelpersTest {
 
     @Test
     fun iteratorOverflowYM() {
-        thrown.expect(NoSuchElementException::class.java)
-        thrown.expectMessage(NO_MORE_MONTHS_AVAILABLE)
         val first = YearMonth.of(2018, 5)
         val last = YearMonth.of(2018, 6)
         val iterator = (first..last).iterator()
-        for (ignore in (1..5)) iterator.next()
+        for (ignore in (1..2)) iterator.next()
+        val exc = assertThrows(NoSuchElementException::class.java) { iterator.next() }
+        assertEquals(NO_MORE_MONTHS_AVAILABLE, exc.message)
     }
 
 
     @Test
     fun iteratorOnEmptyYM() {
-        thrown.expect(NoSuchElementException::class.java)
-        thrown.expectMessage(NO_MORE_MONTHS_AVAILABLE)
         val first = YearMonth.of(2018, 6)
         val last = YearMonth.of(2018, 5)
         val iterator = (first..last).iterator()
-        iterator.next()
+        val exc = assertThrows(NoSuchElementException::class.java) { iterator.next() }
+        assertEquals(NO_MORE_MONTHS_AVAILABLE, exc.message)
     }
 
 
@@ -176,23 +168,22 @@ class DateTimeHelpersTest {
 
     @Test
     fun cursorOverflow() {
-        thrown.expect(NoSuchElementException::class.java)
-        thrown.expectMessage(NO_MORE_DAYS_AVAILABLE)
         val first = LocalDate.of(2018, 3, 30)
         val last = LocalDate.of(2018, 3, 31)
         val cursor = (first..last).cursor()
-        for (ignore in (1..5)) cursor.next()
+        for (ignore in (1..2)) cursor.next()
+        val exc = assertThrows(NoSuchElementException::class.java) { cursor.next() }
+        assertEquals(NO_MORE_DAYS_AVAILABLE, exc.message)
     }
 
 
     @Test
     fun cursorOnEmpty() {
-        thrown.expect(NoSuchElementException::class.java)
-        thrown.expectMessage(NO_MORE_DAYS_AVAILABLE)
         val first = LocalDate.of(2018, 3, 30)
         val last = LocalDate.of(2018, 3, 29)
         val cursor = (first..last).cursor()
-        cursor.peek()
+        val exc = assertThrows(NoSuchElementException::class.java) { cursor.peek() }
+        assertEquals(NO_MORE_DAYS_AVAILABLE, exc.message)
     }
 
 
@@ -239,16 +230,14 @@ class DateTimeHelpersTest {
 
     @Test
     fun easterWrongYearLo() {
-        thrown.expect(IllegalArgumentException::class.java)
-        thrown.expectMessage("Year out of bounds!")
-        0.easterSunday
+        val exc = assertThrows(IllegalArgumentException::class.java) { 0.easterSunday }
+        assertEquals("Year out of bounds!", exc.message)
     }
 
     @Test
     fun easterWrongYearHi() {
-        thrown.expect(IllegalArgumentException::class.java)
-        thrown.expectMessage("Year out of bounds!")
-        10_000.easterSunday
+        val exc = assertThrows(IllegalArgumentException::class.java) { 10_000.easterSunday }
+        assertEquals("Year out of bounds!", exc.message)
     }
 
     @Test
@@ -335,9 +324,8 @@ class DateTimeHelpersTest {
 
     @Test
     fun wrongMonthlyCursor() {
-        thrown.expect(AssertionError::class.java)
-        thrown.expectMessage("Start cannot be after end!")
-        MonthlyCursor(start = now().plusDays(33))
+        val exc = assertThrows(AssertionError::class.java) { MonthlyCursor(start = now().plusDays(33)) }
+        assertEquals("Start cannot be after end!", exc.message)
     }
 
     @Test

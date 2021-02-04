@@ -17,16 +17,11 @@ package cz.mpts.libs.extrautils.kotlin.collections
 
 import cz.mpts.libs.extrautils.kotlin.NO_VALUE_AVAILABLE
 import cz.mpts.libs.extrautils.kotlin.values.*
-import org.junit.*
 import org.junit.Assert.*
-import org.junit.rules.ExpectedException
+import org.junit.Test
 import java.time.LocalDate
 
 class CursorTest {
-
-    @Rule
-    @JvmField
-    val thrown: ExpectedException = ExpectedException.none()
 
     @Test
     fun hasNext() {
@@ -50,11 +45,10 @@ class CursorTest {
 
     @Test
     fun nextNOK() {
-        thrown.expect(NoSuchElementException::class.java)
-        thrown.expectMessage(NO_VALUE_AVAILABLE)
         val cursor = listOf("aaa").cursor()
         assertEquals("aaa", cursor.next())
-        cursor.next()
+        val exc = assertThrows(NoSuchElementException::class.java) { cursor.next() }
+        assertEquals(NO_VALUE_AVAILABLE, exc.message)
     }
 
 
@@ -68,10 +62,9 @@ class CursorTest {
 
     @Test
     fun peekEmpty() {
-        thrown.expect(NoSuchElementException::class.java)
-        thrown.expectMessage(NO_VALUE_AVAILABLE)
         val cursor = emptyList<Any>().cursor()
-        cursor.peek()
+        val exc = assertThrows(NoSuchElementException::class.java) { cursor.peek() }
+        assertEquals(NO_VALUE_AVAILABLE, exc.message)
     }
 
     @Test
@@ -96,11 +89,10 @@ class CursorTest {
 
     @Test
     fun nextNOKSynced() {
-        thrown.expect(NoSuchElementException::class.java)
-        thrown.expectMessage(NO_VALUE_AVAILABLE)
         val cursor = listOf("aaa").synchronizedCursor()
         assertEquals("aaa", cursor.next())
-        cursor.next()
+        val exc = assertThrows(NoSuchElementException::class.java) { cursor.next() }
+        assertEquals(NO_VALUE_AVAILABLE, exc.message)
     }
 
 
@@ -114,10 +106,9 @@ class CursorTest {
 
     @Test
     fun peekEmptySynced() {
-        thrown.expect(NoSuchElementException::class.java)
-        thrown.expectMessage(NO_VALUE_AVAILABLE)
         val cursor = emptyList<Any>().synchronizedCursor()
-        cursor.peek()
+        val exc = assertThrows(NoSuchElementException::class.java) { cursor.peek() }
+        assertEquals(NO_VALUE_AVAILABLE, exc.message)
     }
 
 
