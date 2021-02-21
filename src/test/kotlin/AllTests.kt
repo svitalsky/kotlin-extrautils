@@ -22,7 +22,7 @@ import cz.mpts.libs.extrautils.kotlin.values.*
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
 import org.junit.runners.Suite.SuiteClasses
-
+import stats.StatsTest
 
 @RunWith(Suite::class)
 @SuiteClasses(
@@ -34,6 +34,7 @@ import org.junit.runners.Suite.SuiteClasses
     OptionalValueTest::class,
     TaskStopwatchTest::class,
     ListToTableTransformerTest::class,
-    BasicTokenizerTest::class
+    BasicTokenizerTest::class,
+    StatsTest::class
 )
 class AllTests
