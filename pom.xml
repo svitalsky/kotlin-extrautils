@@ -17,6 +17,7 @@
         <target.version>1.8</target.version>
         <junit.version>4.13.1</junit.version>
         <kotlin.version>1.4.32</kotlin.version>
+        <dokka.version>1.4.32</dokka.version>
     </properties>
 
     <scm>
@@ -93,6 +94,28 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.dokka</groupId>
+                <artifactId>dokka-maven-plugin</artifactId>
+                <version>${dokka.version}</version>
+                <executions>
+                    <execution>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>dokka</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <dokkaPlugins>
+                        <plugin>
+                            <groupId>org.jetbrains.dokka</groupId>
+                            <artifactId>kotlin-as-java-plugin</artifactId>
+                            <version>${dokka.version}</version>
+                        </plugin>
+                    </dokkaPlugins>
+                </configuration>
             </plugin>
         </plugins>
     </build>
