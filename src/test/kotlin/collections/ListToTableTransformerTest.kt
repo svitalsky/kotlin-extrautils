@@ -18,6 +18,7 @@ package cz.mpts.libs.extrautils.kotlin.collections
 import cz.mpts.libs.extrautils.kotlin.collections.TableFillingType.*
 import org.junit.*
 import org.junit.Assert.assertEquals
+import java.util.*
 
 class ListToTableTransformerTest {
 
@@ -148,7 +149,7 @@ class ListToTableTransformerTest {
         assertEquals(expected,
                      transformer.mkTableSource(list = letters,
                                                empty = "-",
-                                               itemTransformer = { it.toUpperCase() }) { list ->
+                                               itemTransformer = { it.uppercase(Locale.getDefault()) }) { list ->
                          list.joinToString()
                      })
     }
@@ -156,11 +157,11 @@ class ListToTableTransformerTest {
     @Test
     fun mkTableSourceTransformWays() {
         val transformer = transformer.listSize(3).startPadding(2)
-        assertEquals(transformer.mkTableSource(list = letters.map { it.toUpperCase() },
+        assertEquals(transformer.mkTableSource(list = letters.map { it.uppercase(Locale.getDefault()) },
                                                empty = "-").map { it.joinToString() },
                      transformer.mkTableSource(list = letters,
                                                empty = "-",
-                                               itemTransformer = { it.toUpperCase() }) { list ->
+                                               itemTransformer = { it.uppercase(Locale.getDefault()) }) { list ->
                          list.joinToString()
                      })
     }
