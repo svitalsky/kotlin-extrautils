@@ -35,6 +35,7 @@ import stats.StatsTest
     TaskStopwatchTest::class,
     ListToTableTransformerTest::class,
     BasicTokenizerTest::class,
-    StatsTest::class
+    StatsTest::class,
+    NotNullTest::class
 )
 class AllTests

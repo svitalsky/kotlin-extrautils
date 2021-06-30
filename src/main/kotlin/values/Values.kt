@@ -130,3 +130,7 @@ private open class LazyVarBase<out E>(private val supplier: () -> E) : LazyVar<E
         initialized.set(false)
     }
 }
+
+
+val <T> T?.notNull: T
+    get() = this ?: throw IllegalStateException("Value is null even though it shouldn't be.")
