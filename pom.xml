@@ -16,7 +16,7 @@
         <source.version>1.8</source.version>
         <target.version>1.8</target.version>
         <junit.version>4.13.2</junit.version>
-        <kotlin.version>1.6.21</kotlin.version>
+        <kotlin.version>1.7.0</kotlin.version>
         <dokka.version>1.6.21</dokka.version>
     </properties>
 
