@@ -90,3 +90,27 @@ inline fun <T, K> Iterable<T>.singleOnly(crossinline keySelector: (T) -> K) =
  * Returns the set of those elements of this Iterable that occur just once.
  */
 fun <T> Iterable<T>.singleOnly() = occurExactlyNTimes(n = 1)
+
+
+inline fun <A> Pair<A, A>.firstIf(crossinline cond: (A, A) -> Boolean): A =
+    if (cond(first, second)) first else second
+
+
+inline fun <A> Pair<A, A>.secondIf(crossinline cond: (A, A) -> Boolean): A =
+    if (cond(first, second)) second else first
+
+
+inline fun <A> Pair<A, A>.firstIf(crossinline cond: (Pair<A, A>) -> Boolean): A =
+    if (cond(this)) first else second
+
+
+inline fun <A> Pair<A, A>.secondIf(crossinline cond: (Pair<A, A>) -> Boolean): A =
+    if (cond(this)) second else first
+
+
+inline fun <A> Pair<A, A>.firstIf(crossinline cond: () -> Boolean): A =
+    if (cond()) first else second
+
+
+inline fun <A> Pair<A, A>.secondIf(crossinline cond: () -> Boolean): A =
+    if (cond()) second else first
