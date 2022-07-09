@@ -83,6 +83,13 @@ class CollectionFunctionsKtTest {
         assertTrue(doesNot.occurExactlyNTimes(n = 2).isEmpty())
         assertEquals(setOf(Other("a", 1), Other("b", 1)), others.occurExactlyNTimes(2) { it.key })
     }
+
+    @Test
+    fun pairFirstIf() {
+        val p = 3 to 5
+        assertEquals(3, p.firstIf { a, b -> a < b })
+        assertEquals(5, p.firstIf { a, b -> a > b })
+    }
 }
 
 
