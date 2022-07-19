@@ -90,6 +90,49 @@ class CollectionFunctionsKtTest {
         assertEquals(3, p.firstIf { a, b -> a < b })
         assertEquals(5, p.firstIf { a, b -> a > b })
     }
+
+    @Test
+    fun pairSecondIf() {
+        val p = 3 to 5
+        assertEquals(3, p.secondIf { a, b -> a > b })
+        assertEquals(5, p.secondIf { a, b -> a < b })
+    }
+
+    @Test
+    fun pairFirstIfPair() {
+        val p = 3 to 5
+        assertEquals(3, p.firstIf { pp -> pp.first < pp.second })
+        assertEquals(5, p.firstIf { pp -> pp.first > pp.second })
+    }
+
+    @Test
+    fun pairSecondIfPair() {
+        val p = 3 to 5
+        assertEquals(3, p.secondIf { pp -> pp.first > pp.second })
+        assertEquals(5, p.secondIf { pp -> pp.first < pp.second })
+    }
+
+    @Test
+    fun pairFirstIfCond() {
+        val o = object {
+            val p = 3 to "Three"
+            val condA = { true }
+            val condB = { false }
+        }
+        assertEquals(3, o.p.firstIf(o.condA))
+        assertEquals("Three", o.p.firstIf(o.condB))
+    }
+
+    @Test
+    fun pairSecondIfCond() {
+        val o = object {
+            val p = 3 to "Three"
+            val condA = { true }
+            val condB = { false }
+        }
+        assertEquals(3, o.p.secondIf(o.condB))
+        assertEquals("Three", o.p.secondIf(o.condA))
+    }
 }
 
 
