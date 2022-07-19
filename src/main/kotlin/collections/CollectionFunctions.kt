@@ -108,9 +108,9 @@ inline fun <A> Pair<A, A>.secondIf(crossinline cond: (Pair<A, A>) -> Boolean): A
     if (cond(this)) second else first
 
 
-inline fun <A> Pair<A, A>.firstIf(crossinline cond: () -> Boolean): A =
+inline fun <A, B: A, C: A> Pair<B, C>.firstIf(crossinline cond: () -> Boolean): A =
     if (cond()) first else second
 
 
-inline fun <A> Pair<A, A>.secondIf(crossinline cond: () -> Boolean): A =
+inline fun <A, B: A, C: A> Pair<B, C>.secondIf(crossinline cond: () -> Boolean): A =
     if (cond()) second else first
