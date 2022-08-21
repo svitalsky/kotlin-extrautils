@@ -6,7 +6,7 @@
 
     <groupId>libs.mpts.cz</groupId>
     <artifactId>extraUtils-kotlin</artifactId>
-    <version>1.103-SNAPSHOT</version>
+    <version>1.103</version>
     <description>Various Kotlin utilities library</description>
     <packaging>jar</packaging>
     <name>extraUtils-kotlin</name>
@@ -86,8 +86,8 @@
                 </executions>
                 <configuration>
                     <jvmTarget>1.8</jvmTarget>
-                    <apiVersion>1.5</apiVersion>
-                    <languageVersion>1.5</languageVersion>
+                    <apiVersion>1.7</apiVersion>
+                    <languageVersion>1.7</languageVersion>
                 </configuration>
             </plugin>
             <plugin>
