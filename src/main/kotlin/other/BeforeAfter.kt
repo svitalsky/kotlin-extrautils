@@ -31,12 +31,9 @@ inline fun <T> afterCommandIf(command: () -> T, condition: Boolean, after: (T) -
     }
 
 
-object Smth
-
-inline fun runIf(condition: Boolean, condCommand: () -> Unit) : Smth =
+inline fun runIf(condition: Boolean, condCommand: () -> Unit) : Unit =
     run {
         if (condition) condCommand()
-        Smth
     }
 
-inline infix fun <T> Smth.andThen(command: () -> T): T = run { command() }
+inline infix fun <T> Unit.andThen(command: () -> T): T = command()
