@@ -22,6 +22,7 @@ import cz.mpts.libs.extrautils.kotlin.values.*
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
 import org.junit.runners.Suite.SuiteClasses
+import other.BeforeAfterKtTest
 import stats.StatsTest
 
 @RunWith(Suite::class)
@@ -36,6 +37,7 @@ import stats.StatsTest
     ListToTableTransformerTest::class,
     BasicTokenizerTest::class,
     StatsTest::class,
-    NotNullTest::class
+    NotNullTest::class,
+    BeforeAfterKtTest::class
 )
 class AllTests
