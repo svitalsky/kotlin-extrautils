@@ -6,7 +6,7 @@
 
     <groupId>libs.mpts.cz</groupId>
     <artifactId>extraUtils-kotlin</artifactId>
-    <version>1.105-SNAPSHOT</version>
+    <version>1.105</version>
     <description>Various Kotlin utilities library</description>
     <packaging>jar</packaging>
     <name>extraUtils-kotlin</name>
@@ -18,6 +18,7 @@
         <junit.version>4.13.2</junit.version>
         <kotlin.version>1.7.10</kotlin.version>
         <dokka.version>1.6.21</dokka.version>
+        <compile.plugin.version>3.10.1</compile.plugin.version>
     </properties>
 
     <scm>
@@ -129,6 +130,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compile.plugin.version}</version>
                 <configuration>
                     <source>8</source>
                     <target>8</target>
