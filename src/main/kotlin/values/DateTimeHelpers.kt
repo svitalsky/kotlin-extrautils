@@ -247,3 +247,11 @@ class MonthlyCursor @JvmOverloads constructor(start: LocalDate, end: LocalDate? 
     override val endInclusive
         get() = lastDay
 }
+
+
+data class BetweenComparatorFstHalf<T: Comparable<T>>(val testee: T, val lo: T)
+
+infix fun <T: Comparable<T>> T.between(lo: T) = BetweenComparatorFstHalf(this, lo)
+
+infix fun <T: Comparable<T>> BetweenComparatorFstHalf<T>.and(hi: T): Boolean =
+    this.lo <= this.testee && this.testee <= hi
