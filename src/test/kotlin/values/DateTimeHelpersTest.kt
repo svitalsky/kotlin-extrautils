@@ -339,4 +339,15 @@ class DateTimeHelpersTest {
         assertFalse(now().isTomorrow)
         assertTrue(now().plusDays(1).isTomorrow)
     }
+
+    @Test
+    fun betweenAndTest() {
+        val lo = LocalDate.of(2020, 1, 1)
+        val hi = LocalDate.of(2022, 12, 31)
+        val far = LocalDate.of(5000, 12, 31)
+        assertTrue(now() between lo and far)
+        assertFalse(LocalDate.of(2023, 1, 1) between lo and hi)
+        assertTrue(5 between 2 and 7)
+        assertFalse(5 between 7 and 9)
+    }
 }
