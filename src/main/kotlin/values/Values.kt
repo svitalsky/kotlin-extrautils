@@ -132,5 +132,21 @@ private open class LazyVarBase<out E>(private val supplier: () -> E) : LazyVar<E
 }
 
 
-val <T> T?.notNull: T
+val <T> T?.notNull: T & Any
     get() = this ?: throw IllegalStateException("Value is null even though it shouldn't be.")
+
+
+fun <T> T?.notNull(msg: String? = null): T & Any =
+    if (msg == null) notNull
+    else run {
+        check(this != null) { msg }
+        this
+    }
+
+
+fun <T> T?.notNull(msg: (() -> String)? = null): T & Any =
+    if (msg == null) notNull
+    else run {
+        check(this != null, msg)
+        this
+    }
