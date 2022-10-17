@@ -150,3 +150,5 @@ fun <T> T?.notNull(msg: (() -> String)? = null): T & Any =
         check(this != null, msg)
         this
     }
+
+infix fun <A, B, C> Pair<A, B>.and(third: C): Triple<A, B, C> = Triple(first, second, third)
