@@ -28,16 +28,17 @@ import stats.StatsTest
 @RunWith(Suite::class)
 @SuiteClasses(
     CollectionFunctionsKtTest::class,
+    CommonInterfacesTests::class,
     CursorTest::class,
+    ListToTableTransformerTest::class,
+    TaskStopwatchTest::class,
+    BeforeAfterKtTest::class,
+    StatsTest::class,
+    BasicTokenizerTest::class,
     DateTimeHelpersTest::class,
     LazyVarTest::class,
+    NotNullTest::class,
     NumberHelpersTest::class,
     OptionalValueTest::class,
-    TaskStopwatchTest::class,
-    ListToTableTransformerTest::class,
-    BasicTokenizerTest::class,
-    StatsTest::class,
-    NotNullTest::class,
-    BeforeAfterKtTest::class
 )
 class AllTests
