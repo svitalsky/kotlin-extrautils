@@ -16,7 +16,7 @@
         <source.version>1.8</source.version>
         <target.version>1.8</target.version>
         <junit.version>4.13.2</junit.version>
-        <kotlin.version>1.7.21</kotlin.version>
+        <kotlin.version>1.8.0</kotlin.version>
         <dokka.version>1.7.10</dokka.version>
         <compile.plugin.version>3.10.1</compile.plugin.version>
     </properties>
@@ -87,8 +87,8 @@
                 </executions>
                 <configuration>
                     <jvmTarget>1.8</jvmTarget>
-                    <apiVersion>1.7</apiVersion>
-                    <languageVersion>1.7</languageVersion>
+                    <apiVersion>1.8</apiVersion>
+                    <languageVersion>1.8</languageVersion>
                 </configuration>
             </plugin>
             <plugin>
