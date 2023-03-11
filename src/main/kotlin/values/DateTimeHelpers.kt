@@ -202,6 +202,12 @@ val LocalDate.isYesterday: Boolean
 val LocalDate.isTomorrow: Boolean
     get() = this == now().plusDays(1)
 
+val LocalDate?.orToday: LocalDate
+    get() = this ?: today()
+
+val LocalDateTime?.orNow: LocalDateTime
+    get() = this ?: LocalDateTime.now()
+
 val httpDatetimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
 
 val ZonedDateTime.httpFormatted

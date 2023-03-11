@@ -340,6 +340,16 @@ class DateTimeHelpersTest {
     }
 
     @Test
+    fun orTodayTest() {
+        assertTrue((null as LocalDate?).orToday.isToday)
+    }
+
+    @Test
+    fun orNowTest() {
+        assertTrue((null as LocalDateTime?).orNow.toLocalDate().isToday)
+    }
+
+    @Test
     fun isYesterday() {
         assertFalse(now().isYesterday)
         assertTrue(now().minusDays(1).isYesterday)
