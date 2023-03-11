@@ -329,6 +329,17 @@ class DateTimeHelpersTest {
     }
 
     @Test
+    fun todayTest() {
+        today().let {
+            assertFalse(it.isYesterday)
+            assertTrue(it.dec().isYesterday)
+            assertTrue(it.isToday)
+            assertFalse(it.isTomorrow)
+            assertTrue(it.inc().isTomorrow)
+        }
+    }
+
+    @Test
     fun isYesterday() {
         assertFalse(now().isYesterday)
         assertTrue(now().minusDays(1).isYesterday)
